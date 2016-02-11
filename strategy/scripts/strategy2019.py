@@ -111,6 +111,7 @@ class NodeHandle(object):
 		self.find_ball_vel_z = 0.6
 		self.goal_error_ang = 0.5
 		self.slow_vel_x = 0.2
+		self.avoid_error_dis = 0.3
 
 		self.max_distance = 1.5
 		self.min_distance = 0.4
@@ -460,7 +461,7 @@ class Strategy(NodeHandle):
 					z = 0
 					if(RPdis<0.3):
 						self.state = 0
-				if(RPdis>0.3):
+				if(RPdis>self.avoid_error_dis):
 					a,b = self.Avoidance_Strategy()
 					z+=a
 					if(abs(z)>0.2 or b==True):
@@ -785,11 +786,11 @@ class Strategy(NodeHandle):
 						#self.state = 1
 						if(RPdis<0.3):
 							self.state = 1
-					if(RPdis>0.3):
+					if(RPdis>self.avoid_error_dis):
 						a,b = self.Avoidance_Strategy()
 						z+=a
 						if(abs(z)>0.2 or b==True):
-							x=0.1
+							x=self.slow_vel_x
 					self.Robot_Vel([x,z])
 					self.prev_RPdis = RPdis
 				else:
@@ -857,11 +858,11 @@ class Strategy(NodeHandle):
 				#self.Robot_Vel([x,z])
 					if(RPdis<self.error_dis):
 						self.state = 0
-				if(RPdis>self.error_dis):
+				if(RPdis>self.avoid_error_dis):
 					a,b = self.Avoidance_Strategy()
 					z+=a
 					if(abs(z)>0.2 or b==True):
-						x=0.1
+						x=self.slow_vel_x
 				self.Robot_Vel([x,z])
 				self.prev_RPdis = RPdis
 			else:
@@ -913,7 +914,7 @@ class Strategy(NodeHandle):
 				#self.Robot_Vel([x,z])
 					if(RPdis<self.error_dis):
 						self.state = 0
-				if(RPdis>0.5):
+				if(RPdis>self.avoid_error_dis):
 					a,b = self.Avoidance_Strategy()
 					z+=a
 					if(abs(z)>0.2 or b==True):
@@ -1017,7 +1018,7 @@ class Strategy(NodeHandle):
 				#self.Robot_Vel([x,z])
 					if(RPdis<self.error_dis):
 						self.state = 0
-				if(RPdis>self.error_dis):
+				if(RPdis>self.avoid_error_dis):
 					a,b = self.Avoidance_Strategy()
 					z+=a
 					if(abs(z)>0.2 or b==True):
