@@ -1,0 +1,50 @@
+==================================
+	def Avoidance_Strategy(self):
+		obstacle = 0
+		obstacle_num = 0
+		avoidance_distance = 0.2
+		avoidance_angle = 45
+		avoidance_vel = 0.5
+		left_or_right = 0
+		#======================================
+		#dicide left  or right
+		for i in range(len(self._scan)):
+			if(i < avoidance_angle and self._scan[i] < avoidance_distance):
+				#left side
+				left_or_right -=1
+			if(i > (360-avoidance_angle) and self._scan[i] < avoidance_distance):
+				left_or_right +=1
+		if(left_or_right>0):
+			left_or_right=1
+		else:
+			left_or_right=-1
+		#if(left_or_right>0):
+		#	print('turn left', left_or_right)
+		#if(left_or_right<0):
+		#	print('turn right', left_or_right)
+		#==========================================
+		for i in range(len(self._scan)):
+			if(i>len(self._scan)):
+				break
+			if(self._scan[i] < avoidance_distance):
+				#print(i)
+				if(i < avoidance_angle and i > 0):
+					#left side
+					obstacle_num +=1
+					#obstacle -= (avoidance_distance-self._scan[i])
+					obstacle += (avoidance_distance-self._scan[i])*left_or_right
+				if(i > (360-avoidance_angle) or i < 0):
+					#right side
+					obstacle_num +=1
+					#obstacle += (avoidance_distance-self._scan[i])
+					obstacle += (avoidance_distance-self._scan[i])*left_or_right
+		if(obstacle_num):
+			obstacle = obstacle*10/obstacle_num
+			if(obstacle > avoidance_vel):
+				obstacle = avoidance_vel
+			elif(obstacle < avoidance_vel*-1):
+				obstacle = avoidance_vel*-1
+		print (obstacle)
+		
+		return obstacle
+	# strategy

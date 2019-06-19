@@ -1,0 +1,9 @@
+<?xml version="1.0" ?>
+<launch> 
+  <rosparam command="load" file="$(find vision)/config/tb3.yaml"/>
+  <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch" />
+  <node name="web_video_server" pkg="web_video_server" type="web_video_server"/>
+  <include file="$(find raspicam_node)/launch/camerav2_410x308_30fps.launch" />
+
+  <!--<node name="image_converter" pkg="vision" type="image_converter" respawn="true" respawn_delay="5"/>-->
+</launch>
