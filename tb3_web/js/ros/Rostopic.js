@@ -1,3 +1,26 @@
+var shoot = new ROSLIB.Topic({
+    ros: ros,
+    name: '/tb3/shoot',
+    messageType: '/std_msgs/Empty'
+});
+function PublishTopicshoot() {
+    //console.log("shoot");
+    shoot.publish();
+}
+//shoot enable
+var shootenable = new ROSLIB.Topic({
+    ros: ros,
+    name: '/tb3/strategy/shootenable',
+    messageType: '/std_msgs/Bool'
+});
+function PublishTopicshootenable(checked) {
+    //console.log(checked);
+    var msg = new ROSLIB.Message({
+      data:checked
+    });
+    shootenable.publish(msg);
+}
+//double point
 var double_point = new ROSLIB.Topic({
     ros: ros,
     name: '/tb3/strategy/double',
@@ -9,7 +32,7 @@ function PublishTopicdouble(double_point_color) {
     });
     double_point.publish(msg);
 }
-//vector
+//move detection
 var moving = new ROSLIB.Topic({
     ros: ros,
     name: '/tb3/strategy/moving',
