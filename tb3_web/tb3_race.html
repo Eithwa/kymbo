@@ -399,11 +399,15 @@
                                     <table>
                                         <label>Shoot strategy</label>
                                     </table>
-                                    <table width="100%" id="ShootEnable">
+                                    <table width="100%" id="ShootStrategy">
                                         <tr>
                                             <td width="100%" align="center">
-                                                <input autocomplete="on" checked="checked" id="shoot_enable" type="checkbox" name="shootElement" onclick="PublishTopicshootenable(this.checked)" />
-                                                <label id="shoot_enable" for="shoot_enable">Shoot enable</label>
+                                                <input autocomplete="on" checked="checked" id="shoot_disable" type="radio" name="shootElement" onclick="PublishTopicshootenable(this.checked)" />
+                                                <label id="shoot_disable_lable" for="shoot_disable">Disable</label>
+                                                <input autocomplete="on"  id="straight_shoot" type="radio" name="shootElement" onclick="PublishTopicshootenable(this.checked)" />
+                                                <label id="straight_shoot_lable" for="straight_shoot">Straight</label>
+                                                <input autocomplete="on"  id="far_shoot" type="radio" name="shootElement" onclick="PublishTopicshootenable(this.checked)" />
+                                                <label id="far_shoot_lable" for="far_shoot">Far</label>
                                             </td>
                                         </tr>
                                     </table>
@@ -412,15 +416,11 @@
                                     </table>
                                     <table width="100%" id="ColorDisableDiv">
                                         <tr>
-                                            <td width="34%" align="center">
+                                            <td width="100%" align="center">
                                                 <input autocomplete="off" id="Red_disable" type="checkbox" name="colorElement" onclick="Color_Disable(0)" />
                                                 <label id="Red_disable" for="Red_disable">Red</label>
-                                            </td>
-                                            <td width="34%" align="center">
                                                 <input autocomplete="off" id="Blue_disable" type="checkbox" name="colorElement" onclick="Color_Disable(1)" />
                                                 <label id="Blue_disable" for="Blue_disable">Blue</label>
-                                            </td>
-                                            <td  width="34%" align="center">
                                                 <input autocomplete="off" id="Yellow_disable" type="checkbox" name="colorElement" onclick="Color_Disable(2)" />
                                                 <label id="Yellow_disable" for="Yellow_disable">Yellow</label>
                                             </td>
@@ -609,7 +609,7 @@
       $("#KeyboardDiv").buttonset();
       $("#ColorDisableDiv").buttonset();
       $("#DoublePointDiv").buttonset();
-      $("#ShootEnable").buttonset();
+      $("#ShootStrategy").buttonset();
     </script>
 <footer>
     <script src="js/slider/SliderControl.js"></script>

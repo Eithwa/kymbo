@@ -1,5 +1,5 @@
 /*==========================================================*/
-#shoot_enable{
+#shoot_disable_lable{
  background-image: none;
     /*background-color: #99CCFF;*/
     font-size: 12px;
@@ -8,14 +8,58 @@
     border-bottom-right-radius:5px;
 }
 
-#shoot_enable.ui-state-hover {
+#shoot_disable_lable.ui-state-hover {
     background-image: none;
     /*background-color: #99CCFF;*/
     font-size: 12px;
     background-color: #FFF;
 }
 
-#shoot_enable.ui-state-active {
+#shoot_disable_lable.ui-state-active {
+    background-color: #FFCC00;
+    font-size: 12px;
+    color: #1A1A65;
+}
+/*==========================================================*/
+#straight_shoot_lable{
+ background-image: none;
+    /*background-color: #99CCFF;*/
+    font-size: 12px;
+    color: #663D00;
+    border-top-right-radius:5px;
+    border-bottom-right-radius:5px;
+}
+
+#straight_shoot_lable.ui-state-hover {
+    background-image: none;
+    /*background-color: #99CCFF;*/
+    font-size: 12px;
+    background-color: #FFF;
+}
+
+#straight_shoot_lable.ui-state-active {
+    background-color: #FFCC00;
+    font-size: 12px;
+    color: #1A1A65;
+}
+/*==========================================================*/
+#far_shoot_lable{
+ background-image: none;
+    /*background-color: #99CCFF;*/
+    font-size: 12px;
+    color: #663D00;
+    border-top-right-radius:5px;
+    border-bottom-right-radius:5px;
+}
+
+#far_shoot_lable.ui-state-hover {
+    background-image: none;
+    /*background-color: #99CCFF;*/
+    font-size: 12px;
+    background-color: #FFF;
+}
+
+#far_shoot_lable.ui-state-active {
     background-color: #FFCC00;
     font-size: 12px;
     color: #1A1A65;

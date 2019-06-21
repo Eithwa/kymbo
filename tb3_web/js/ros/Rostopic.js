@@ -4,8 +4,10 @@ var shoot = new ROSLIB.Topic({
     messageType: '/std_msgs/Empty'
 });
 function PublishTopicshoot() {
+    let msg = new ROSLIB.Message({
+    });
     //console.log("shoot");
-    shoot.publish();
+    shoot.publish(msg);
 }
 //shoot enable
 var shootenable = new ROSLIB.Topic({
@@ -51,16 +53,17 @@ var cmdVel = new ROSLIB.Topic({
 });
 function PublishTopicCmdVel(vec3) {
     console.log(vec3);
+    //vec3=parseFloat(vec3);
     var twist = new ROSLIB.Message({
         linear: {
-            x: vec3.x,
-            y: vec3.y,
-            z: 0
+            x: parseFloat(vec3.x),
+            y: parseFloat(vec3.y),
+            z: parseFloat(0)
         },
         angular: {
-            x: 0,
-            y: 0,
-            z: vec3.z
+            x: parseFloat(0),
+            y: parseFloat(0),
+            z: parseFloat(vec3.z)
         }
     });
     cmdVel.publish(twist);
@@ -369,8 +372,9 @@ var Topicreset = new ROSLIB.Topic({
 });
 
 function Pub_Reset() {
-
-    Topicreset.publish();
+    let msg = new ROSLIB.Message({
+    });
+    Topicreset.publish(msg);
 }
 //===================================================================
 var TopicStart = new ROSLIB.Topic({
@@ -380,7 +384,7 @@ var TopicStart = new ROSLIB.Topic({
 });
 
 function strategy_start(num) {
-	
+	num=parseInt(num);
     let msg = new ROSLIB.Message({
         data: num
     });
@@ -394,12 +398,13 @@ var Topicarm = new ROSLIB.Topic({
 });
 
 function arm(num) {
-	
+	num=parseInt(num);
     let msg = new ROSLIB.Message({
         data: num
     });
     Topicarm.publish(msg);
 }
+
 //===================================================================
 var Topicbattery = new ROSLIB.Topic({
     ros: ros,
