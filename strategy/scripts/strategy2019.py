@@ -22,6 +22,7 @@ import time
 # rostopic msg
 from std_msgs.msg import Int32
 from std_msgs.msg import Int32,Bool
+from std_msgs.msg import Int32,Empty
 from std_msgs.msg import Int32MultiArray
 from geometry_msgs.msg import Twist
 from sensor_msgs.msg import LaserScan
@@ -80,11 +81,11 @@ class NodeHandle(object):
 		else:
 			self.pub_vel = rospy.Publisher('cmd_vel',Twist, queue_size = 1)
 			self.pub_arm = rospy.Publisher('/tb3/arm',Int32, queue_size = 1)
+			self.pub_shoot = rospy.Publisher("tb3/shoot",Empty, queue_size = 1)
 			self.sub_scaninfo = rospy.Subscriber("scan",LaserScan,self.Set_ScanInfo)
 			self.sub_odom = rospy.Subscriber("odom",Odometry,self.Set_Odom)
-		
+			self.sub_double = rospy.Subscriber("tb3/strategy/double",Int32,self.Set_Double)
 		self.sub_balls = rospy.Subscriber("tb3/ball",Int32MultiArray,self.Set_Balls)
-		self.sub_double = rospy.Subscriber("tb3/strategy/double",Int32,self.Set_Double)
 		#self.sub_ball2s = rospy.Subscriber("tb3/ball2",aim2,self.Set_Ball2s)
 		self.sub_start = rospy.Subscriber("tb3/strategy/start",Int32,self.Set_Start)
 		self.sub_save = rospy.Subscriber("tb3/save", Int32, self.Set_Param)
@@ -680,7 +681,8 @@ class Strategy(NodeHandle):
 				#if(RPdis < self.error_area):
 				if(RPdis > self.catchBallDis):
 					if(self.prev_RPdis >= RPdis):
-						if(RPdis > 220):
+						#if(RPdis > 220):
+						if(RPdis > 100):
 							if(abs(RBang) > self.error_ang):
 								if(RBang > 0):
 									x = self.vel_x
@@ -734,7 +736,7 @@ class Strategy(NodeHandle):
 				self.Robot_Stop()
 	def	Goal_Strategy(self):
 		front_goal = copy.deepcopy(self.goal)
-		front_goal[0] = 2.7
+		front_goal[0] = 2.0
 		#=======================go to front of goal area===================
 		if(self.state == 0):
 			RPang = Norm_Angle(self.Get_RP_Angle(front_goal)-self._front)
@@ -783,11 +785,14 @@ class Strategy(NodeHandle):
 				z = 0
 				self.Robot_Vel([x,z])
 				self.state = 2
+		
+
+
 		#=======================go to goal area===================
 		elif(self.state == 2):
 			RPang = Norm_Angle(self.Get_RP_Angle(self.goal)-self._front)
 			#RBang = 0.0	
-			if(abs(RPang) > self.error_ang):
+			if(abs(RPang) > 1):
 				if(RPang > 0):
 						x = 0
 						z = self.z_speed_planning(RPang)
@@ -798,6 +803,25 @@ class Strategy(NodeHandle):
 			else:
 				self.Robot_Stop()
 				self.state = 3
+		#================shoot strategy===========================
+		elif(self.state == 3):
+				self.pub_shoot.publish();
+				time.sleep(1);
+				self.Robot_Stop()
+				self.state = 4
+		elif(self.state == 4):
+				self.Robot_Stop()
+				print("finish")
+				self.lostball = False
+				self.Robot_Stop()
+				self.state = 0
+				self.behavior = FIND_BALL
+				self.ballcolor = None
+				self.balldis = 999
+				self.ballang = 999
+				self.ballarea = 0
+				self.goal = self.findballpos
+'''
 		elif(self.state == 3):
 			RPdis = self.Get_RP_Dis(self.goal)
 			RPang = Norm_Angle(self.Get_RP_Angle(self.goal)-self._front)
@@ -884,9 +908,8 @@ class Strategy(NodeHandle):
 			self.Robot_Stop()
 			#print("state ", self.state)
 			#self.state = 0
-			#self.behavior = FIND_BALL
-			
-	
+			#self.behavior = FIND_BALL			
+'''
 def main():
 	rospy.init_node('strategy', anonymous=True)
 	strategy = Strategy()
