@@ -18,10 +18,16 @@ function Open_Camera(value) {
     var mode = parseInt(document.getElementById('HSVSelect').value);
     Camera_Switch(value);
     if (view.checked) {
+        video.src = "img/black.png";
         if (viewflag == 'src') {
             video.style.height = "100%";
-            video.src = "http://" + document.getElementById("RobotIP").value + ":8080/stream?topic=/tb3/src";
+            video.style.top="0%"
+            setTimeout(function(){video.src = "http://" + document.getElementById("RobotIP").value + ":8080/stream?topic=/tb3/src"},100);
+            //video.src = "http://" + document.getElementById("RobotIP").value + ":8080/stream?topic=/tb3/src";
         } else if (viewflag == 'mask') {
+            //video.position="relative";
+            video.style.top="40%"
+            console.log("fuck")
             video.style.height = "60%";
             switch (mode) {
                 case 0:
@@ -41,10 +47,13 @@ function Open_Camera(value) {
                     break;
             }
             console.log(mode);
-            video.src = "http://" + document.getElementById("RobotIP").value + ":8080/stream?topic=/tb3/mask";
+            setTimeout(function(){video.src = "http://" + document.getElementById("RobotIP").value + ":8080/stream?topic=/tb3/mask"},100);
+            //video.src = "http://" + document.getElementById("RobotIP").value + ":8080/stream?topic=/tb3/mask";
         } else if (viewflag == 'monitor') {
+            video.style.top="40%"
             video.style.height = "60%";
-            video.src = "http://" + document.getElementById("RobotIP").value + ":8080/stream?topic=/tb3/monitor";
+            setTimeout(function(){video.src = "http://" + document.getElementById("RobotIP").value + ":8080/stream?topic=/tb3/monitor"},100);
+            //video.src = "http://" + document.getElementById("RobotIP").value + ":8080/stream?topic=/tb3/monitor";
         } else if (viewflag == 'off') {
             video.src = "img/offline.png";
         }

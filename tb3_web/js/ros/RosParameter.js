@@ -146,8 +146,8 @@ function Save_VisionParam() {
     document.getElementById('Red_disable').checked = false;
     document.getElementById('Blue_disable').checked = false;
     document.getElementById('Yellow_disable').checked = false;
-    document.getElementById('White_disable').checked = false;
-    document.getElementById('Black_disable').checked = false;
+    //document.getElementById('White_disable').checked = false;
+    //document.getElementById('Black_disable').checked = false;
 
     var obj = document.getElementsByName('VisionParamElement');
     var box = []
@@ -159,8 +159,8 @@ function Save_VisionParam() {
     if (Param_Vison_Flag)
         console.log('Param Vision ' + box);
     Vision_Param.set(box);
-    setTimeout(Pub_Save,1000);
-    setTimeout(savecall,1000);
+    setTimeout(Pub_Save(),3000);
+    setTimeout(savecall(),3000);
 }
 
 Vision_Param.get(function(value) {
