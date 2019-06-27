@@ -328,7 +328,7 @@ Monitor.subscribe(function(msg) {
     var MBox = [];
 
     MBox=msg.data;
-    for (let i = 0; i < 9; i++) {
+    for (let i = 0; i < 12; i++) {
         document.getElementsByName('MonitorElement')[i].innerText = MBox[i];
     } 
 });
