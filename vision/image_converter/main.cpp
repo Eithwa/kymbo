@@ -12,8 +12,8 @@ int main(int argc, char **argv)
     //signal(SIGINT, SigintHandler);
     ros::Rate loop_rate(60); //program speed limit
 
-    Vision cam("/usb_cam/image_raw");
-    //Vision cam("/raspicam_node/image/compressed");
+    //Vision cam("/usb_cam/image_raw");
+    Vision cam("/raspicam_node/image/compressed");
     fflush(stdout); //更新文字緩衝區
 
     while (ros::ok())
