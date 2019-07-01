@@ -1,6 +1,6 @@
 var shoot = new ROSLIB.Topic({
     ros: ros,
-    name: '/tb3/shoot',
+    name: '/motion/tb3/shoot',
     messageType: '/std_msgs/Empty'
 });
 function PublishTopicshoot() {
@@ -48,7 +48,7 @@ function PublishTopicmoving() {
 }
 var cmdVel = new ROSLIB.Topic({
     ros: ros,
-    name: '/cmd_vel',
+    name: '/motion/cmd_vel',
     messageType: '/geometry_msgs/Twist'
 });
 function PublishTopicCmdVel(vec3) {
@@ -367,7 +367,7 @@ catchball.subscribe(function(msg) {
 //=========================================================
 var Topicreset = new ROSLIB.Topic({
     ros: ros,
-    name: 'reset',
+    name: 'motion/reset',
     messageType: 'std_msgs/Empty'
 });
 
@@ -393,7 +393,7 @@ function strategy_start(num) {
 //===================================================================
 var Topicarm = new ROSLIB.Topic({
     ros: ros,
-    name: '/tb3/arm',
+    name: '/motion/tb3/arm',
     messageType: 'std_msgs/Int32'
 });
 

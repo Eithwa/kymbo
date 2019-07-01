@@ -818,6 +818,7 @@ class Strategy(NodeHandle):
 				z=0
 				time.sleep(1);
 				self.state = 3
+'''
 		#================shoot strategy===========================
 		elif(self.state == 3):
 				self.pub_shoot.publish();
@@ -924,7 +925,7 @@ class Strategy(NodeHandle):
 			#print("state ", self.state)
 			#self.state = 0
 			#self.behavior = FIND_BALL			
-'''
+
 def main():
 	rospy.init_node('strategy', anonymous=True)
 	strategy = Strategy()
