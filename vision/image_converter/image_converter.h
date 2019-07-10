@@ -21,8 +21,8 @@ class Vision : protected NodeHandle
   private:
     ros::NodeHandle nh;
     ros::Subscriber image_sub;
-    void imageCb(const sensor_msgs::CompressedImageConstPtr &msg);
-    //void imageCb(const sensor_msgs::ImageConstPtr& msg);
+    //void imageCb(const sensor_msgs::CompressedImageConstPtr &msg);
+    void imageCb(const sensor_msgs::ImageConstPtr& msg);
     cv::Mat CutFrame(Mat frame, int upx, int upy, int downx, int downy);
     cv::Mat DrawMonior(Mat frame, Object ball, Color index);
     double Rate();
