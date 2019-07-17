@@ -1,4 +1,48 @@
 /*==========================================================*/
+#Camera1label{
+ background-image: none;
+    /*background-color: #99CCFF;*/
+    font-size: 12px;
+    color: #663D00;
+    border-top-right-radius:5px;
+    border-bottom-right-radius:5px;
+}
+
+#Camera1label.ui-state-hover {
+    background-image: none;
+    /*background-color: #99CCFF;*/
+    font-size: 12px;
+    background-color: #FFF;
+}
+
+#Camera1label.ui-state-active {
+    background-color: #FFCC00;
+    font-size: 12px;
+    color: #1A1A65;
+}
+/*==========================================================*/
+#Camera2label{
+ background-image: none;
+    /*background-color: #99CCFF;*/
+    font-size: 12px;
+    color: #663D00;
+    border-top-right-radius:5px;
+    border-bottom-right-radius:5px;
+}
+
+#Camera2label.ui-state-hover {
+    background-image: none;
+    /*background-color: #99CCFF;*/
+    font-size: 12px;
+    background-color: #FFF;
+}
+
+#Camera2label.ui-state-active {
+    background-color: #FFCC00;
+    font-size: 12px;
+    color: #1A1A65;
+}
+/*==========================================================*/
 #KeyboardControlButton {
     background-image: none;
     /*background-color: #99CCFF;*/

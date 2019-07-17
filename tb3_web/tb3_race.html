@@ -24,10 +24,10 @@
     <link rel="stylesheet" href="css/form.css">
 
     <!-- js lib -->
-    <script src="js/variable.js"></script>
+    
 </head>
 
-<body class="Overflow" onload="Init()">
+<body class="Overflow" onload="Init();">
     <div class="modal-dialog Interface-Background Interface-Size Overflow">
         <div class="modal-content">
             <div class="modal-header">
@@ -41,7 +41,7 @@
             </div>
             <div class="modal-body Interface-BodySize">
                 <div id="CameraSwitch">
-                    <table class="Table-W100 Table-H90 Table-Center">
+                    <table class="Table-W100 Table-H90 Table-Center" >
                         <tr>
                             <td>
                                 <div id="WifiButton">
@@ -82,6 +82,24 @@
                                 </div>
                             </td>
                         </tr>
+                        <table id="camera_switch">
+                           <tr>
+                                <td>
+                                    <div>
+                                        <input type="radio" id="Camera1" name="CameraElement" checked="true" onclick="camera1_center_parameter_get();camera1_hsv_parameter_get();Open_Camera(viewflag)" />
+                                        <label id="Camera1label" for="Camera1">Camera1</label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div>
+                                        <input type="radio" id="Camera2" name="CameraElement" onclick="camera2_center_parameter_get();camera2_hsv_parameter_get();Open_Camera(viewflag)" />
+                                        <label id="Camera2label" for="Camera2">Camera2</label>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
                     </table>
                 </div>
                 <div class="form-group" align="center" id="View-Window">
@@ -324,8 +342,8 @@
                                                             <option value="0">Red</option>
                                                             <option value="1">Blue</option>
                                                             <option value="2">Yellow</option>
-                                                            <option value="3">White</option>
-                                                            <option value="4">Black</option>
+                                                            <!--<option value="3">White</option>
+                                                            <option value="4">Black</option>-->
                                                         </select>
                                                     </td>
                                                     <td>
@@ -612,11 +630,12 @@
       $("#ColorDisableDiv").buttonset();
       $("#DoublePointDiv").buttonset();
       $("#ShootStrategy").buttonset();
+      $("#camera_switch").buttonset();
+      
     </script>
 <footer>
     <script src="js/slider/SliderControl.js"></script>
-    <script src="js/init.js"></script>
-
+    <script src="js/variable.js"></script>
     <!-- ros lib -->
     <script src="js/ros/RobotConnect.js"></script>
     <script src="js/ros/Rostopic.js"></script>
@@ -625,5 +644,6 @@
     <script src="js/ros/video.js"></script>
     <script src="js/SliderControl.js"></script>
     <script src="js/KeyboardControl.js"></script>
+    <script src="js/init.js"></script>
 </footer>
 </html>

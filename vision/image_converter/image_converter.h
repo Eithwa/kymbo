@@ -14,6 +14,7 @@ class Coord
 class Vision : protected NodeHandle
 {
   public:
+    Vision();
     Vision(string topic);
     ~Vision();
     cv::Mat get_source();
@@ -21,15 +22,20 @@ class Vision : protected NodeHandle
   private:
     ros::NodeHandle nh;
     ros::Subscriber image_sub;
+    ros::Subscriber image_sub2;
     //void imageCb(const sensor_msgs::CompressedImageConstPtr &msg);
     void imageCb(const sensor_msgs::ImageConstPtr& msg);
+    void imageCb2(const sensor_msgs::ImageConstPtr& msg);
     cv::Mat CutFrame(Mat frame, int upx, int upy, int downx, int downy);
     cv::Mat DrawMonior(Mat frame, Object ball, Color index);
     double Rate();
     double FrameRate;
+    double FrameRate2;
     cv::Mat source;
     cv::Mat monitor;
+    cv::Mat monitor2;
     cv::Mat mask;
+    cv::Mat mask2;
 
     Object ColorMoldel(Color index);
     Object SearchObject(Mat mask);

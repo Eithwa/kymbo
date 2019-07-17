@@ -46,3 +46,6 @@ function Init_VisionParam() {
         document.getElementsByName('VisionParamLabelElement')[i].innerText = VisionParam[i];
     }
 }
+
+camera1_center_parameter_get();
+camera1_hsv_parameter_get();
