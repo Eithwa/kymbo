@@ -9,12 +9,18 @@ NodeHandle::NodeHandle()
 
     color_sub = nh.subscribe("/tb3/color", 1, &NodeHandle::colorcall, this);
     center_sub = nh.subscribe("/tb3/center", 1, &NodeHandle::centercall, this);
+    center_sub2 = nh.subscribe("/tb3/center2", 1, &NodeHandle::centercall2, this);
 
     src_pub = nh.advertise<sensor_msgs::Image>("/tb3/src", 1);
+    src_pub2 = nh.advertise<sensor_msgs::Image>("/tb3/src2", 1);
     mask_pub = nh.advertise<sensor_msgs::Image>("/tb3/mask", 1);
+    mask_pub2 = nh.advertise<sensor_msgs::Image>("/tb3/mask2", 1);
     monitor_pub = nh.advertise<sensor_msgs::Image>("/tb3/monitor", 1);
+    monitor_pub2 = nh.advertise<sensor_msgs::Image>("/tb3/monitor2", 1);
     fps_pub = nh.advertise<std_msgs::Float32>("/tb3/fps", 1);
+    fps_pub2 = nh.advertise<std_msgs::Float32>("/tb3/fps2", 1);
     obj_pub = nh.advertise<std_msgs::Int32MultiArray>("/tb3/object", 1);
+    obj_pub2 = nh.advertise<std_msgs::Int32MultiArray>("/tb3/object2", 1);
     catch_pub = nh.advertise<std_msgs::Int32MultiArray>("/tb3/catch", 1);
 	ball_pub = nh.advertise<std_msgs::Int32MultiArray>("/tb3/ball", 1);
 }
@@ -63,6 +69,15 @@ void NodeHandle::colorcall(const vision::color msg)
     case 4:
         HSV_black.assign(msg.data.begin(), msg.data.end());
         break;
+    case 5:
+        HSV_redgoal.assign(msg.data.begin(), msg.data.end());
+        break;
+    case 6:
+        HSV_bluegoal.assign(msg.data.begin(), msg.data.end());
+        break;
+    case 7:
+        HSV_yellowgoal.assign(msg.data.begin(), msg.data.end());
+        break;
     }
     //for(int i=0; i<6; ++i)
     //  std::cout << msg.data[i] << ' ';
@@ -90,6 +105,15 @@ void NodeHandle::centercall(const std_msgs::Int32MultiArray msg)
     CatchDistanceMsg = msg.data[2];
 	SizeFilterMsg = msg.data[3];
 }
+void NodeHandle::centercall2(const std_msgs::Int32MultiArray msg)
+{
+    CenterXMsg2 = msg.data[0];
+    //cout<<"CenterXMsg"<<endl;
+    CenterYMsg2 = msg.data[1];
+    //cout<<CenterYMsg<<endl;
+    CatchDistanceMsg2 = msg.data[2];
+	SizeFilterMsg2 = msg.data[3];
+}
 void NodeHandle::get_param()
 {
     cout << "Get parameter" << endl;
@@ -98,7 +122,9 @@ void NodeHandle::get_param()
     nh.getParam("/tb3/HSV/Yellow", HSV_yellow);
     nh.getParam("/tb3/HSV/White", HSV_white);
     nh.getParam("/tb3/HSV/Black", HSV_black);
-    nh.getParam("/tb3/HSV/Black", HSV_black);
+    nh.getParam("/tb3/HSV/RedGoal", HSV_redgoal);
+    nh.getParam("/tb3/HSV/BlueGoal", HSV_bluegoal);
+    nh.getParam("/tb3/HSV/YellowGoal", HSV_yellowgoal);
 
     vector<int> Setting;
     nh.getParam("/tb3/center", Setting);
@@ -109,27 +135,56 @@ void NodeHandle::get_param()
         CatchDistanceMsg = Setting[2];
 		SizeFilterMsg = Setting[3];
     }
+    nh.getParam("/tb3/center2", Setting);
+    if (Setting.size())
+    {
+        CenterXMsg2 = Setting[0];
+        CenterYMsg2 = Setting[1];
+        CatchDistanceMsg2 = Setting[2];
+		SizeFilterMsg2 = Setting[3];
+    }
 }
 void NodeHandle::pub_monitor(Mat Monitor)
 {
     sensor_msgs::ImagePtr monitormsg = cv_bridge::CvImage(std_msgs::Header(), "bgr8", Monitor).toImageMsg();
     monitor_pub.publish(monitormsg);
 }
+void NodeHandle::pub_monitor2(Mat Monitor)
+{
+    sensor_msgs::ImagePtr monitormsg = cv_bridge::CvImage(std_msgs::Header(), "bgr8", Monitor).toImageMsg();
+    monitor_pub2.publish(monitormsg);
+}
 void NodeHandle::pub_mask(Mat Mask)
 {
     sensor_msgs::ImagePtr maskmsg = cv_bridge::CvImage(std_msgs::Header(), "bgr8", Mask).toImageMsg();
     mask_pub.publish(maskmsg);
+}
+void NodeHandle::pub_mask2(Mat Mask)
+{
+    sensor_msgs::ImagePtr maskmsg = cv_bridge::CvImage(std_msgs::Header(), "bgr8", Mask).toImageMsg();
+    mask_pub2.publish(maskmsg);
 }
 void NodeHandle::pub_src(Mat Src)
 {
     sensor_msgs::ImagePtr srcmsg = cv_bridge::CvImage(std_msgs::Header(), "bgr8", Src).toImageMsg();
     src_pub.publish(srcmsg);
 }
+void NodeHandle::pub_src2(Mat Src)
+{
+    sensor_msgs::ImagePtr srcmsg = cv_bridge::CvImage(std_msgs::Header(), "bgr8", Src).toImageMsg();
+    src_pub2.publish(srcmsg);
+}
 void NodeHandle::pub_fps(double fps)
 {
     std_msgs::Float32 msg;
     msg.data = fps;
     fps_pub.publish(msg);
+}
+void NodeHandle::pub_fps2(double fps)
+{
+    std_msgs::Float32 msg;
+    msg.data = fps;
+    fps_pub2.publish(msg);
 }
 void NodeHandle::pub_object(Object red, Object blue, Object yellow, Object white, Object black)
 {
@@ -160,6 +215,26 @@ void NodeHandle::pub_object(Object red, Object blue, Object yellow, Object white
     msg.data.push_back(black.dis_point.y);
 
     obj_pub.publish(msg);
+}
+void NodeHandle::pub_object2(Object red, Object blue, Object yellow)
+{
+    std_msgs::Int32MultiArray msg;
+    msg.data.push_back(red.offset);
+    msg.data.push_back(red.distance);
+    msg.data.push_back(red.dis_point.x);
+    msg.data.push_back(red.dis_point.y);
+
+    msg.data.push_back(blue.offset);
+    msg.data.push_back(blue.distance);
+    msg.data.push_back(blue.dis_point.x);
+    msg.data.push_back(blue.dis_point.y);
+
+    msg.data.push_back(yellow.offset);
+    msg.data.push_back(yellow.distance);
+    msg.data.push_back(yellow.dis_point.x);
+    msg.data.push_back(yellow.dis_point.y);
+
+    obj_pub2.publish(msg);
 }
 void NodeHandle::pub_catch(Object red, Object blue, Object yellow, Object white, Object black)
 {

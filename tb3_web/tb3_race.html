@@ -14,6 +14,8 @@
     <script src="js/bootstrap.min.js"></script>
     <script src="jquery-ui-1.11.4/jquery-ui.js"></script>
     <script src="jquery-ui-1.11.4/jquery-ui.min.js"></script>
+
+    
     <script src="js/eventemitter2.min.js"></script>
     <script src="js/ros/roslib.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css"/>
@@ -24,10 +26,10 @@
     <link rel="stylesheet" href="css/form.css">
 
     <!-- js lib -->
-    <script src="js/variable.js"></script>
+    
 </head>
 
-<body class="Overflow" onload="Init()">
+<body class="Overflow" onload="Init();">
     <div class="modal-dialog Interface-Background Interface-Size Overflow">
         <div class="modal-content">
             <div class="modal-header">
@@ -41,7 +43,7 @@
             </div>
             <div class="modal-body Interface-BodySize">
                 <div id="CameraSwitch">
-                    <table class="Table-W100 Table-H90 Table-Center">
+                    <table class="Table-W100 Table-H90 Table-Center" >
                         <tr>
                             <td>
                                 <div id="WifiButton">
@@ -82,6 +84,24 @@
                                 </div>
                             </td>
                         </tr>
+                        <table id="camera_switch">
+                           <tr>
+                                <td>
+                                    <div>
+                                        <input type="radio" id="Camera1" name="CameraElement" checked="true" onclick="camera1_center_parameter_get();camera1_hsv_parameter_get();Open_Camera(viewflag)" />
+                                        <label id="Camera1label" for="Camera1">Camera1</label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div>
+                                        <input type="radio" id="Camera2" name="CameraElement" onclick="camera2_center_parameter_get();camera2_hsv_parameter_get();Open_Camera(viewflag)" />
+                                        <label id="Camera2label" for="Camera2">Camera2</label>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
                     </table>
                 </div>
                 <div class="form-group" align="center" id="View-Window">
@@ -190,18 +210,32 @@
                                             </table>
                           
                                             <table class="Table-W100 Table-Center Table-H90">
-                                                <tr>
-                                                    <td>
-                                                        <input type="button" id="start_btn" name="StrategyElement"
-                                                            value="start" onclick="strategy_start(1);" />
-                                                        <input type="button" id="stop_btn" name="StrategyElement" value="stop"
-                                                            onclick="strategy_start(0);" />
-                                                    </td>
-                                                    <td>
-                                                        <input type="button" id="reset_btn" name="StrategyElement"
-                                                            value="reset" onclick="Pub_Reset();" />
-                                                    <td>
-                                                </tr>
+                                                <div id="StatusDiv">
+                                                    <tr>
+                                                        <td>
+                                                            <div id="startdiv">
+                                                                <input id="StartInput" type="radio" name="SwitchButton" onclick="strategy_start(1);" />
+                                                                <label id="StartButton" for="StartInput">Start</label>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div id="stopdiv">
+                                                                <input id="StopInput" type="radio" checked="checked" name="SwitchButton" onclick="strategy_start(0);shop_robot();" />
+                                                                <label id="StopButton" for="StopInput">Stop</label>
+                                                            </div>
+                                                        </td>
+                                                        <!--<td>
+                                                            <input type="radio" id="start_btn" name="StrategyElement"
+                                                                value="start" onclick="strategy_start(1);" />
+                                                            <input type="radio" id="stop_btn" name="StrategyElement" checked="false"value="stop"
+                                                                onclick="strategy_start(0);" />
+                                                        </td>-->
+                                                        <td>
+                                                            <input type="button" id="reset_btn" name="StrategyElement"
+                                                                value="reset" onclick="Pub_Reset();" />
+                                                        <td>
+                                                    </tr>
+                                                </div>
                                             </table>
                                             <table>
                                                 <tr>
@@ -324,8 +358,8 @@
                                                             <option value="0">Red</option>
                                                             <option value="1">Blue</option>
                                                             <option value="2">Yellow</option>
-                                                            <option value="3">White</option>
-                                                            <option value="4">Black</option>
+                                                            <!--<option value="3">White</option>
+                                                            <option value="4">Black</option>-->
                                                         </select>
                                                     </td>
                                                     <td>
@@ -606,24 +640,39 @@
         </div>
     </div>
 </body>
-
+    
     <script type="text/javascript">
+
       $("#KeyboardDiv").buttonset();
       $("#ColorDisableDiv").buttonset();
       $("#DoublePointDiv").buttonset();
       $("#ShootStrategy").buttonset();
+      $("#camera_switch").buttonset();
+      $("#startdiv").buttonset();
+      $("#stopdiv").buttonset();
     </script>
 <footer>
     <script src="js/slider/SliderControl.js"></script>
-    <script src="js/init.js"></script>
-
+    <script src="js/variable.js"></script>
+    <script src="js/KeyboardControl.js"></script>
     <!-- ros lib -->
     <script src="js/ros/RobotConnect.js"></script>
     <script src="js/ros/Rostopic.js"></script>
+
+
+
+
+
     <script src="js/ros/Rosservice.js"></script>
     <script src="js/ros/RosParameter.js"></script>
     <script src="js/ros/video.js"></script>
     <script src="js/SliderControl.js"></script>
-    <script src="js/KeyboardControl.js"></script>
+    
+
+
+
+
+
+    <script src="js/init.js"></script>
 </footer>
 </html>

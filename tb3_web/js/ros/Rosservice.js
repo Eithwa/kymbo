@@ -2,7 +2,7 @@ function sleep(delay) {
     var start = new Date().getTime();
     while (new Date().getTime() < start + delay);
 }
-function $(c){return document.getElementById(c);} 
+
 function SendMsgss(Msg,color) 
 { 
   let  d = new Date();
@@ -19,9 +19,9 @@ function SendMsgss(Msg,color)
     newFontElem.style.color = color;
   }
   newFontElem.innerHTML = '['+n+':'+m+':'+s+'] '+Msg+"<br/>"; 
-  $("info").appendChild(newFontElem); 
+  document.getElementById("info").appendChild(newFontElem); 
 
-  $("info").scrollTop= $("info").scrollHeight;//每次收到消息滾動條拉到最下面
+  document.getElementById("info").scrollTop= document.getElementById("info").scrollHeight;//每次收到消息滾動條拉到最下面
 } 
  
 
@@ -63,32 +63,35 @@ var run_request = new ROSLIB.ServiceRequest({
 let connected = false;
 
 function run(){
-	setTimeout(run, 3000);
-  runClient.callService(run_request,
-    function(run_request) {
-      if(connected == false){
-        document.getElementById('Red_disable').checked = false;
-        document.getElementById('Blue_disable').checked = false;
-        document.getElementById('Yellow_disable').checked = false;
-        //document.getElementById('White_disable').checked = false;
-        //document.getElementById('Black_disable').checked = false;
-        console.log('程式連接成功');
-        SendMsgss('程式連接成功',"blue");
-        connected = true;
+  setTimeout(run, 3000);
+  view_checked = document.getElementById('Camera-View').checked;
+  if(view_checked){
+    runClient.callService(run_request,
+      function(run_request) {
+        if(connected == false){
+          document.getElementById('Red_disable').checked = false;
+          document.getElementById('Blue_disable').checked = false;
+          document.getElementById('Yellow_disable').checked = false;
+          //document.getElementById('White_disable').checked = false;
+          //document.getElementById('Black_disable').checked = false;
+          console.log('程式連接成功');
+          SendMsgss('程式連接成功',"blue");
+          connected = true;
+        }
+        //callback(result.action_servers);
+      },
+      function(message){
+        if(connected == true){
+          console.log('程式連接中斷');
+          SendMsgss('程式連接中斷',"red");
+          //console.log(message);
+          connected = false;
+        }
+        else{
+          console.log('無法連接程式端');
+          SendMsgss('無法連接程式端',"red");
+        }
       }
-      //callback(result.action_servers);
-    },
-    function(message){
-      if(connected == true){
-        console.log('程式連接中斷');
-        SendMsgss('程式連接中斷',"red");
-        //console.log(message);
-        connected = false;
-      }
-      else{
-        console.log('無法連接程式端');
-        SendMsgss('無法連接程式端',"red");
-      }
-    }
-  );
+    );
+  }
 }

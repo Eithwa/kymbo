@@ -1,3 +1,4 @@
+<?xml version="1.0" ?>
 <launch>
   <arg name="multi_robot_name" default=""/>
   <arg name="set_lidar_frame_id" default="base_scan"/>

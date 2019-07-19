@@ -11,6 +11,8 @@
 #include <sensor_msgs/image_encodings.h>
 #include <sensor_msgs/CompressedImage.h>
 #include <geometry_msgs/Twist.h>
+#include <sensor_msgs/BatteryState.h>
+#include <nav_msgs/Odometry.h>
 #include <ros/package.h>
 
 using namespace std;
@@ -28,14 +30,20 @@ class NodeHandle
     ros::Subscriber arm_sub;
     ros::Subscriber reset_sub;
     ros::Subscriber cmdvel_sub;
+    ros::Subscriber battery_sub;
+    ros::Subscriber odom_sub;
 
     void shootcall(const std_msgs::Empty msg);
     void armcall(const std_msgs::Int32 msg);
     void resetcall(const std_msgs::Empty msg);
     void cmdvelcall(const geometry_msgs::Twist msg);
+    void batterycall(const sensor_msgs::BatteryState msg);
+    void odomcall(const nav_msgs::Odometry msg);
     //===============publisher====================
     ros::Publisher shoot_pub;
     ros::Publisher arm_pub;
     ros::Publisher reset_pub;
     ros::Publisher cmdvel_pub;
+    ros::Publisher battery_pub;
+    ros::Publisher odom_pub;
 };

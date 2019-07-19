@@ -29,6 +29,9 @@ enum Color
     Yellow,
     White,
     Black,
+    RedGoal,
+    BlueGoal,
+    YellowGoal,
     None
 };
 class Object
@@ -68,6 +71,11 @@ class NodeHandle
     int CenterYMsg;
     int CatchDistanceMsg;
 	int SizeFilterMsg;
+    //=================
+    int CenterXMsg2;
+    int CenterYMsg2;
+    int CatchDistanceMsg2;
+	int SizeFilterMsg2;
     //================color====================
     int HSV_mode;
     vector<int> HSV_red;
@@ -75,12 +83,20 @@ class NodeHandle
     vector<int> HSV_yellow;
     vector<int> HSV_white;
     vector<int> HSV_black;
+    vector<int> HSV_redgoal;
+    vector<int> HSV_bluegoal;
+    vector<int> HSV_yellowgoal;
     //========================================
     void pub_monitor(Mat Monitor);
+    void pub_monitor2(Mat Monitor);
     void pub_mask(Mat Mask);
+    void pub_mask2(Mat Mask);
     void pub_src(Mat Src);
+    void pub_src2(Mat Src);
     void pub_fps(double fps);
+    void pub_fps2(double fps);
     void pub_object(Object red, Object blue, Object yellow, Object white, Object black);
+    void pub_object2(Object red, Object blue, Object yellow);
     void pub_catch(Object red, Object blue, Object yellow, Object white, Object black);
 	void pub_ball(Object red, Object blue, Object yellow, Object white, Object black);
 
@@ -105,13 +121,21 @@ class NodeHandle
     //void savecall(const std_msgs::Int32 msg);
     //==============center====================
     ros::Subscriber center_sub;
+    ros::Subscriber center_sub2;
     void centercall(const std_msgs::Int32MultiArray msg);
+    void centercall2(const std_msgs::Int32MultiArray msg);
     //======================================
     ros::Publisher src_pub;
+    ros::Publisher src_pub2;
     ros::Publisher monitor_pub;
+    ros::Publisher monitor_pub2;
     ros::Publisher mask_pub;
+    ros::Publisher mask_pub2;
     ros::Publisher fps_pub;
+    ros::Publisher fps_pub2;
+
     ros::Publisher obj_pub;
+    ros::Publisher obj_pub2;
     ros::Publisher catch_pub;
 	ros::Publisher ball_pub;
 };

@@ -1,5 +1,9 @@
 #include "image_converter.h"
 #define PI 3.14159
+#define RPICAM "/raspicam_node/image/compressed"
+#define USBCAM "/usb_cam/image_raw"
+#define USBCAM1 "camera1/usb_cam1/image_raw"
+#define USBCAM2 "camera2/usb_cam2/image_raw"
 Coord directions[8] = {
     Coord(0, 1),
     Coord(0, -1),
@@ -9,10 +13,12 @@ Coord directions[8] = {
     Coord(1, 1),
     Coord(-1, -1),
     Coord(1, -1)};
-Vision::Vision(string topic)
+Vision::Vision()
 {
     //image_sub = nh.subscribe("/raspicam_node/image/compressed", 1,&Vision::imageCb,this);
-    image_sub = nh.subscribe(topic, 1, &Vision::imageCb, this);
+    image_sub = nh.subscribe(RPICAM, 1, &Vision::imageCb, this);
+    image_sub2 = nh.subscribe(USBCAM1, 1, &Vision::imageCb2, this);
+
     FrameRate = 0.0;
 }
 Vision::~Vision()
@@ -124,6 +130,89 @@ void Vision::imageCb(const sensor_msgs::CompressedImageConstPtr &msg)
         ROS_ERROR("Could not convert to image!");
     }
 }
+void Vision::imageCb2(const sensor_msgs::ImageConstPtr& msg)
+{
+    cv_bridge::CvImagePtr cv_ptr;
+    try
+    {
+        cv_ptr = cv_bridge::toCvCopy(msg, sensor_msgs::image_encodings::BGR8); //convert image data
+        if (!cv_ptr->image.empty())
+        {
+            FrameRate2 = Rate();
+
+            //cv::imshow("view", cv_ptr->image);
+            //cv::waitKey(10);
+            //source = cv_ptr->image.clone();
+
+            double scale = 0.5;
+            Mat frame = cv_ptr->image.clone();
+            Size dsize = Size(frame.cols * scale, frame.rows * scale);
+            resize(frame, frame, dsize);
+            //source = CutFrame(frame, 0, frame.rows * 0.4, frame.cols, frame.rows);
+            source = frame.clone();
+            monitor2 = frame.clone();
+            //cv::imshow("view", source);
+            //cv::waitKey(10);
+
+            //=============================================
+            Object red_goal, blue_goal, yellow_goal;
+
+#pragma omp parallel sections
+            {
+#pragma omp section
+                {
+                    red_goal = ColorMoldel(RedGoal);
+                    //cout<<"1";
+                }
+#pragma omp section
+                {
+                    blue_goal = ColorMoldel(BlueGoal);
+                    //cout<<"2";
+                }
+#pragma omp section
+                {
+                    yellow_goal = ColorMoldel(YellowGoal);
+                    //cout<<"3";
+                }
+
+            }
+            //center line
+            line(monitor2, Point(CenterXMsg, 0), Point(CenterXMsg, monitor2.rows), Scalar(0, 0, 255), 1);
+            monitor2 = DrawMonior(monitor2, red_goal, RedGoal);
+            monitor2 = DrawMonior(monitor2, blue_goal, BlueGoal);
+            monitor2 = DrawMonior(monitor2, yellow_goal, YellowGoal);
+
+            switch (HSV_mode)
+            {
+            case 5:
+                mask2 = red_goal.mask;
+                break;
+            case 6:
+                mask2 = blue_goal.mask;
+                break;
+            case 7:
+                mask2 = yellow_goal.mask;
+                break;
+            }
+            pub_src2(frame);
+            pub_mask2(mask2);
+            pub_monitor2(monitor2);
+            pub_fps2(FrameRate2);
+            pub_object2(red_goal, blue_goal, yellow_goal);
+
+            //imshow("mask2",mask2);
+            imshow("red_goal.mask",red_goal.mask);
+            imshow("blue_goal.mask",blue_goal.mask);
+            imshow("yellow_goal.mask",yellow_goal.mask);
+            imshow("monitor2",monitor2);
+            waitKey(10);
+        }
+    }
+    catch (cv_bridge::Exception &e)
+    {
+        ROS_ERROR("Could not convert to image!");
+    }
+}
 //===========================================================================
 double Vision::Rate()
 {
@@ -197,6 +286,15 @@ Object Vision::ColorMoldel(Color index)
     case Black:
         HSV.assign(HSV_black.begin(), HSV_black.end());
         break;
+    case RedGoal:
+        HSV.assign(HSV_redgoal.begin(), HSV_redgoal.end());
+        break;
+    case BlueGoal:
+        HSV.assign(HSV_bluegoal.begin(), HSV_bluegoal.end());
+        break;
+    case YellowGoal:
+        HSV.assign(HSV_yellowgoal.begin(), HSV_yellowgoal.end());
+        break;
     }
 
     Object ball;
@@ -211,9 +309,8 @@ Object Vision::ColorMoldel(Color index)
         smax = HSV[3];
         vmin = HSV[4];
         vmax = HSV[5];
-
+        
         cvtColor(inputMat, hsv, CV_BGR2HSV);
-
         if (HSV[0] <= HSV[1])
         {
             inRange(hsv, Scalar(hmin, smin, vmin), Scalar(hmax, smax, vmax), mask);
@@ -231,7 +328,7 @@ Object Vision::ColorMoldel(Color index)
 
         //閉操作 (連接一些連通域)
         //morphologyEx(mask, mask, MORPH_CLOSE, element);
-
+        
         inputMat.copyTo(dst, (cv::Mat::ones(mask.size(), mask.type()) * 255 - mask));
         //cv::imshow("dst", dst);
         //waitKey(10);
@@ -446,6 +543,18 @@ cv::Mat Vision::DrawMonior(Mat frame, Object ball, Color index)
         case 4:
             output = "Black";
             color = Scalar(0, 0, 0);
+            break;
+        case 5:
+            output = "RedGoal";
+            color = Scalar(0, 0, 255);
+            break;
+        case 6:
+            output = "BlueGoal";
+            color = Scalar(255, 0, 0);
+            break;
+        case 7:
+            output = "YellowGoal";
+            color = Scalar(0, 255, 255);
             break;
         default:
             output = "None";
