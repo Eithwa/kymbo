@@ -2,14 +2,20 @@ window.addEventListener("keydown", keysdown, false);
 window.addEventListener("keyup", keyuped, false);
 
 var keys = [];
-var start;
-var vec3;
+var start = false;
+var vec3 = new ROSLIB.Message({
+        x: 0,
+        y: 0,
+        z: 0
+    });
 
 function KeyboardState(state) {
     start = state;
 }
 
+
 function keysdown(e) {
+   
     if (start == true) {
         var speed = document.getElementById("SpeedInput").value;
         keys[e.keyCode] = true;
@@ -21,7 +27,7 @@ function keysdown(e) {
             vec3 = new ROSLIB.Message({
                 x: parseFloat(speed/100),
                 y: 0,
-                z: -parseFloat(speed*2/100)
+                z: -parseFloat(speed*1.5/100)
             });
             PublishTopicCmdVel(vec3);
             //PublishTopicCmdVel(vec3);
@@ -32,7 +38,7 @@ function keysdown(e) {
             vec3 = new ROSLIB.Message({
                 x: parseFloat(speed/100),
                 y: 0,
-                z: parseFloat(speed*2/100)
+                z: parseFloat(speed*1.5/100)
             });
             PublishTopicCmdVel(vec3);
             //PublishTopicCmdVel(vec3);
@@ -43,7 +49,7 @@ function keysdown(e) {
             vec3 = new ROSLIB.Message({
                 x: -parseFloat(speed/100),
                 y: 0,
-                z: -parseFloat(speed*2/100)
+                z: -parseFloat(speed*1.5/100)
             });
             PublishTopicCmdVel(vec3);
             //PublishTopicCmdVel(vec3);
@@ -54,7 +60,7 @@ function keysdown(e) {
             vec3 = new ROSLIB.Message({
                 x: -parseFloat(speed/100),
                 y: 0,
-                z: parseFloat(speed*2/100)
+                z: parseFloat(speed*1.5/100)
             });
             PublishTopicCmdVel(vec3);
             //PublishTopicCmdVel(vec3);
@@ -76,7 +82,7 @@ function keysdown(e) {
             vec3 = new ROSLIB.Message({
                 x: 0,
                 y: 0,
-                z: -parseFloat(speed*2/100)
+                z: -parseFloat(speed*1.5/100)
             });
             PublishTopicCmdVel(vec3);
             //PublishTopicCmdVel(vec3);
@@ -98,11 +104,37 @@ function keysdown(e) {
             vec3 = new ROSLIB.Message({
                 x: 0,
                 y: 0,
-                z: parseFloat(speed*2/100)
+                z: parseFloat(speed*1.5/100)
             });
             PublishTopicCmdVel(vec3);
             //PublishTopicCmdVel(vec3);
             document.getElementById('direction').innerText = "左轉";
+        }
+        //o start
+        else if (keys[79]){
+            //strategy_start(1);
+            $('#StartInput').prop('checked',true);
+            $('#StartInput').change();
+            $('#StopInput').prop('checked',false);
+            $('#StopInput').change();
+        }
+        //p stop
+        else if (keys[80]){
+            //strategy_start(0);
+            $('#StartInput').prop('checked',false);
+            $('#StartInput').change();
+            $('#StopInput').prop('checked',true);
+            $('#StopInput').change();
+        }
+        //[ open arm
+        else if (keys[219]){
+            arm(0);
+        }//] close arm
+        else if (keys[221]){
+            arm(1);
+        }//\ shoot
+        else if (keys[220]){
+            PublishTopicshoot();
         }
     }
 }
@@ -136,7 +168,7 @@ function releasebutton(state) {
         vec3.x = 0;
         vec3.y = 0;
         vec3.Z = 0;
-    }
+    }PublishTopicshoot();
     PublishTopicCmdVel(vec3_);
     document.getElementById('direction').innerText = "停止";
     //PublishTopicCmdVel(vec3);

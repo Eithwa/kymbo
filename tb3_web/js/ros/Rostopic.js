@@ -69,6 +69,23 @@ function PublishTopicCmdVel(vec3) {
     cmdVel.publish(twist);
     PublishTopicmoving();
 }
+function shop_robot(){
+    var twist = new ROSLIB.Message({
+        linear: {
+            x: parseFloat(0),
+            y: parseFloat(0),
+            z: parseFloat(0)
+        },
+        angular: {
+            x: parseFloat(0),
+            y: parseFloat(0),
+            z: parseFloat(0)
+        }
+    });
+    console.log("stop");
+    cmdVel.publish(twist);
+    PublishTopicmoving();
+}
 //===================================================================
 //HSV mode
 //color
@@ -498,7 +515,7 @@ function arm(num) {
 //===================================================================
 var Topicbattery = new ROSLIB.Topic({
     ros: ros,
-    name: '/battery_state',
+    name: '/motion/battery_state',
     messageType: 'sensor_msgs/BatteryState'
 });
 
@@ -516,7 +533,7 @@ Topicbattery.subscribe(function(msg) {
 //=================================
 var odomcall = new ROSLIB.Topic({
     ros: ros,
-    name: 'odom',
+    name: '/motion/odom',
     messageType: 'nav_msgs/Odometry'
 });
 odomcall.subscribe(function(msg) {

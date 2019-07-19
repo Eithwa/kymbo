@@ -2,7 +2,7 @@ function sleep(delay) {
     var start = new Date().getTime();
     while (new Date().getTime() < start + delay);
 }
-function $(c){return document.getElementById(c);} 
+
 function SendMsgss(Msg,color) 
 { 
   let  d = new Date();
@@ -19,9 +19,9 @@ function SendMsgss(Msg,color)
     newFontElem.style.color = color;
   }
   newFontElem.innerHTML = '['+n+':'+m+':'+s+'] '+Msg+"<br/>"; 
-  $("info").appendChild(newFontElem); 
+  document.getElementById("info").appendChild(newFontElem); 
 
-  $("info").scrollTop= $("info").scrollHeight;//每次收到消息滾動條拉到最下面
+  document.getElementById("info").scrollTop= document.getElementById("info").scrollHeight;//每次收到消息滾動條拉到最下面
 } 
  
 
