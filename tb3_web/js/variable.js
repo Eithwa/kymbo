@@ -26,6 +26,8 @@ var Param_HSV_Flag = 1;
 //=======================================
 // vision 
 var VisionParam = [0, 0, 0, 0];
+var RobotParam = [0.3, 0.2, 1.0, 0.025, 0.6, 0.5, 0.2]
+var S_planningParam = [1.5, 0.4, 0.6, 0.2, 30, 5, 0.6, 0.2]
 // show flag
 var Param_Vison_Flag = 1;
 //=======================================

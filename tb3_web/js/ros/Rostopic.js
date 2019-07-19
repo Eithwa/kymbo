@@ -10,15 +10,15 @@ function PublishTopicshoot() {
     shoot.publish(msg);
 }
 //shoot enable
-var shootenable = new ROSLIB.Topic({
+var shootstrategy = new ROSLIB.Topic({
     ros: ros,
-    name: '/tb3/strategy/shootenable',
-    messageType: '/std_msgs/Bool'
+    name: '/tb3/strategy/strategy',
+    messageType: '/std_msgs/Int32'
 });
-function PublishTopicshootenable(checked) {
+function PublishTopicshootstrategy(value) {
     //console.log(checked);
     var msg = new ROSLIB.Message({
-      data:checked
+      data:value
     });
     shootenable.publish(msg);
 }

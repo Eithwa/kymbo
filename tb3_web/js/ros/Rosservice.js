@@ -48,7 +48,29 @@ function savecall(){
     }
   );
 }
+//=====================================
+var paramstrategyClient = new ROSLIB.Service({
+  ros : ros,
+  name : '/tb3/strategy/save',
+  serviceType : 'std_srvs/Empty'
+});
 
+var paramstrategy_request = new ROSLIB.ServiceRequest({
+});
+
+function strategy_savecall(){
+  paramstrategyClient.callService(paramstrategy_request,
+    function(paramstrategy_request) {
+      console.log('更新策略參數成功');
+      SendMsgss('更新策略參數成功');
+      //callback(result.action_servers);
+    },
+    function(message){
+      console.log(message);
+      SendMsgss('更新策略參數失敗',"red");
+    }
+  );
+}
 //=====================================
 
 var runClient = new ROSLIB.Service({

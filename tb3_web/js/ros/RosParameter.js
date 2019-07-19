@@ -324,4 +324,57 @@ function camera2_center_parameter_get(){
         }
     });
 }
-
+var robot_Param = new ROSLIB.Param({
+    ros: ros,
+    name: '/tb3/strategy/robot',
+});
+robot_Param.get(function(value) {
+    let obj = document.getElementsByName('ParameterElement');
+    if (value != null) {
+        for (var i = 0; i < value.length; i++) {
+            obj[i].innerText = value[i];
+        }
+    } else {
+        for (let i = 0; i < RobotParam.length; i++) {
+            obj[i].innerText = RobotParam[i];
+        }
+        //obj2[4].innerText = 0;
+    }
+});
+var splanning_Param = new ROSLIB.Param({
+    ros: ros,
+    name: '/tb3/strategy/s_planning',
+});
+splanning_Param.get(function(value) {
+    let obj = document.getElementsByName('s_planningElement');
+    if (value != null) {
+        for (var i = 0; i < value.length; i++) {
+            obj[i].innerText = value[i];
+        }
+    } else {
+        for (let i = 0; i < S_planningParam.length; i++) {
+            obj[i].innerText = S_planningParam[i];
+        }
+        //obj2[4].innerText = 0;
+    }
+});
+//============
+function Set_strategy_Param() {
+    let obj = document.getElementsByName('ParameterElement');
+    let obj2 = document.getElementsByName('s_planningElement');
+    let box = [];
+    let box2 =[];
+    for (let i = 0; i < obj.length; i++) {
+        box[i] = parseFloat(obj[i].value);
+    }
+    for (let i = 0; i < obj2.length; i++) {
+        box2[i] = parseFloat(obj2[i].value);
+    }
+    console.log('Param Robot ' + box);
+    console.log('Param S_planning ' + box2);
+    robot_Param.set(box);
+    splanning_Param.set(box2);
+    setTimeout(Pub_Save(),3000);
+    setTimeout(savecall(),3000);
+    setTimeout(strategy_savecall(),3000);
+}

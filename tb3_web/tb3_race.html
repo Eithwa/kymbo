@@ -139,8 +139,115 @@
                                     <!-- Set Param Content  -->
                                     <div id="Set-Param-Content" class="tab-content">
                                         <div class="tab-pane fade" id="Robot-Param">
-                                            <p>fuck</p>
+                                            <!--<p>fuck</p>-->
+                                            <div id="parameter_div">
+                                                <table  class="Table-W100 Table-Center Table-H10">
+                                                    <tr colspan="2" align="center">
+                                                        <label >Robot Parameter&nbsp;</label>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>vel_x</td>
+                                                        <td>
+                                                            <input type="text" name="ParameterElement" value="0.3" />
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>vel_z</td>
+                                                        <td>
+                                                            <input type="text" name="ParameterElement" value="0.2" />
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>error_ang</td>
+                                                        <td>
+                                                            <input type="text" name="ParameterElement" value="1.0" />
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>error_dis</td>
+                                                        <td>
+                                                            <input type="text" name="ParameterElement" value="0.025" />
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>find_ball_vel_z</td>
+                                                        <td>
+                                                            <input type="text" name="ParameterElement" value="0.6" />
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>goal_error_ang</td>
+                                                        <td>
+                                                            <input type="text" name="ParameterElement" value="0.5" />
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>slow_vel_x</td>
+                                                        <td>
+                                                            <input type="text" name="ParameterElement" value="0.2" />
+                                                        </td>
+                                                    </tr>
+
+                                                    <td colspan="2" align="center">
+                                                        <label >S-planning Parameter&nbsp;</label>
+                                                    </td>
+                                                    <tr>
+                                                        <td>max_distance</td>
+                                                        <td>
+                                                            <input type="text" name="s_planningElement" value="1.5" />
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>min_distance</td>
+                                                        <td>
+                                                            <input type="text" name="s_planningElement" value="0.4" />
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>x_max_speed</td>
+                                                        <td>
+                                                            <input type="text" name="s_planningElement" value="0.6" />
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>x_min_speed</td>
+                                                        <td>
+                                                            <input type="text" name="s_planningElement" value="0.2" />
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>max_angle</td>
+                                                        <td>
+                                                            <input type="text" name="s_planningElement" value="30" />
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>z_max_peed</td>
+                                                        <td>
+                                                            <input type="text" name="s_planningElement" value="10" />
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>z_min_speed</td>
+                                                        <td>
+                                                            <input type="text" name="s_planningElement" value="0.6" />
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>max_distance</td>
+                                                        <td>
+                                                            <input type="text" name="s_planningElement" value="0.2" />
+                                                        </td>
+                                                    </tr>
+                                                 </table>
+                                             </div>
+                                             <div >
+                                             
+                                                   <button id="HSV-Sent" onclick="Set_strategy_Param()">sent</button>
+                                             
+                                             </div>
                                         </div>
+                                     
                                         <div class="tab-pane fade in active" id="Robot-Strategy">
                                         
                                             <table>
@@ -448,6 +555,23 @@
                                         </tr>
                                     </table>-->
                                     <table>
+                                        <label>Strategy</label>
+                                    </table>
+                                    <div id="StrategyDiv">
+                                        <table width="100%" >
+                                            <tr>
+                                                <td width="100%" align="center">
+                                                    <input id="disable_shoot" type="radio" name="strategyElement" onclick="PublishTopicshootstrategy(0)" />
+                                                    <label id="disable_shoot_lable" for="disable_shoot">disable</label>
+                                                    <input id="short_shoot" type="radio" checked="true" name="strategyElement" onclick="PublishTopicshootstrategy(1)" />
+                                                    <label id="short_shoot_lable" for="short_shoot">short</label>
+                                                    <input id="far_shoot" type="radio" name="strategyElement" onclick="PublishTopicshootstrategy(2)" />
+                                                    <label id="far_shoot_lable" for="far_shoot">far</label>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <table>
                                         <label>Color Disable</label>
                                     </table>
                                     <table width="100%" id="ColorDisableDiv">
@@ -520,9 +644,9 @@
                                             </td>
                                             <td>
                                                 <label>(</label>
-                                                <label id="red_point_x" name="MonitorElement">0</label>
+                                                <label id="red_point_x" name="MonitorElement">999</label>
                                                 <label>,</label>
-                                                <label id="red_point_y" name="MonitorElement">0</label>
+                                                <label id="red_point_y" name="MonitorElement">999</label>
                                                 <label>)</label>
                                             </td>
                                         </tr>
@@ -538,9 +662,9 @@
                                             </td>
                                             <td>
                                                 <label>(</label>
-                                                <label id="blue_point_x" name="MonitorElement">0</label>
+                                                <label id="blue_point_x" name="MonitorElement">999</label>
                                                 <label>,</label>
-                                                <label id="blue_point_y" name="MonitorElement">0</label>
+                                                <label id="blue_point_y" name="MonitorElement">999</label>
                                                 <label>)</label>
                                             </td>
                                         </tr>
@@ -556,9 +680,9 @@
                                             </td>
                                             <td>
                                                 <label>(</label>
-                                                <label id="yellow_point_x" name="MonitorElement">0</label>
+                                                <label id="yellow_point_x" name="MonitorElement">999</label>
                                                 <label>,</label>
-                                                <label id="yellow_point_y" name="MonitorElement">0</label>
+                                                <label id="yellow_point_y" name="MonitorElement">999</label>
                                                 <label>)</label>
                                             </td>
                                         </tr>
@@ -642,12 +766,13 @@
 </body>
     
     <script type="text/javascript">
-
+        
       $("#KeyboardDiv").buttonset();
       $("#ColorDisableDiv").buttonset();
       $("#DoublePointDiv").buttonset();
       $("#ShootStrategy").buttonset();
       $("#camera_switch").buttonset();
+      $("#StrategyDiv").buttonset();
       $("#startdiv").buttonset();
       $("#stopdiv").buttonset();
     </script>
