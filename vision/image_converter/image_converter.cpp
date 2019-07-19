@@ -27,8 +27,8 @@ Vision::~Vision()
     destroyAllWindows();
 }
 //==================================影像接收與處理=============================
-void Vision::imageCb(const sensor_msgs::ImageConstPtr& msg)
-//void Vision::imageCb(const sensor_msgs::CompressedImageConstPtr &msg)
+//void Vision::imageCb(const sensor_msgs::ImageConstPtr& msg)
+void Vision::imageCb(const sensor_msgs::CompressedImageConstPtr &msg)
 {
     cv_bridge::CvImagePtr cv_ptr;
     try

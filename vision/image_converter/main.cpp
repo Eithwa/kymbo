@@ -15,6 +15,7 @@ int main(int argc, char **argv)
     Vision cam;
     //Vision cam("/usb_cam/image_raw");
     //Vision cam("/raspicam_node/image/compressed");
+
     fflush(stdout); //更新文字緩衝區
 
     while (ros::ok())

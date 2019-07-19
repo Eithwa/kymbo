@@ -168,7 +168,7 @@ function releasebutton(state) {
         vec3.x = 0;
         vec3.y = 0;
         vec3.Z = 0;
-    }PublishTopicshoot();
+    }
     PublishTopicCmdVel(vec3_);
     document.getElementById('direction').innerText = "停止";
     //PublishTopicCmdVel(vec3);

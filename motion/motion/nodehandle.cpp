@@ -6,15 +6,15 @@ NodeHandle::NodeHandle()
     arm_sub = nh.subscribe("/motion/tb3/arm", 1, &NodeHandle::armcall, this);
     reset_sub = nh.subscribe("/motion/reset", 1, &NodeHandle::resetcall, this);
     cmdvel_sub = nh.subscribe("/motion/cmd_vel", 1, &NodeHandle::cmdvelcall, this);
-    battery_sub = nh.subscribe("/motion/battery_state", 1, &NodeHandle::batterycall, this);
-    odom_sub = nh.subscribe("/motion/odom", 1, &NodeHandle::odomcall, this);
+    battery_sub = nh.subscribe("/battery_state", 1, &NodeHandle::batterycall, this);
+    odom_sub = nh.subscribe("/odom", 1, &NodeHandle::odomcall, this);
     
     shoot_pub = nh.advertise<std_msgs::Empty>("/tb3/shoot", 1);
     arm_pub = nh.advertise<std_msgs::Int32>("/tb3/arm", 1);
     reset_pub = nh.advertise<std_msgs::Empty>("/reset", 1);
     cmdvel_pub = nh.advertise<geometry_msgs::Twist>("/cmd_vel", 1);
-    battery_pub = nh.advertise<sensor_msgs::BatteryState>("/battery_state", 1);
-    odom_pub = nh.advertise<nav_msgs::Odometry>("/odom", 1);
+    battery_pub = nh.advertise<sensor_msgs::BatteryState>("/motion/battery_state", 1);
+    odom_pub = nh.advertise<nav_msgs::Odometry>("/motion/odom", 1);
 }
 NodeHandle::~NodeHandle()
 {
