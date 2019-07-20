@@ -20,7 +20,7 @@ function PublishTopicshootstrategy(value) {
     var msg = new ROSLIB.Message({
       data:value
     });
-    shootenable.publish(msg);
+    shootstrategy.publish(msg);
 }
 //double point
 var double_point = new ROSLIB.Topic({

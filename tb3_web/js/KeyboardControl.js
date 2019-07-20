@@ -112,7 +112,7 @@ function keysdown(e) {
         }
         //o start
         else if (keys[79]){
-            //strategy_start(1);
+            strategy_start(1);
             $('#StartInput').prop('checked',true);
             $('#StartInput').change();
             $('#StopInput').prop('checked',false);
@@ -120,7 +120,7 @@ function keysdown(e) {
         }
         //p stop
         else if (keys[80]){
-            //strategy_start(0);
+            strategy_start(0);
             $('#StartInput').prop('checked',false);
             $('#StartInput').change();
             $('#StopInput').prop('checked',true);

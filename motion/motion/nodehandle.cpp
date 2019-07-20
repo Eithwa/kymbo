@@ -22,7 +22,13 @@ NodeHandle::~NodeHandle()
 void NodeHandle::shootcall(const std_msgs::Empty msg)
 {
     //std::cout<<"shoot\n";
-    shoot_pub.publish(msg);
+    static double StartTime = ros::Time::now().toSec();
+    double EndTime = ros::Time::now().toSec();
+    double dt = EndTime - StartTime;
+    if(dt>2){
+        StartTime = EndTime;
+        shoot_pub.publish(msg);
+    }
 }
 void NodeHandle::resetcall(const std_msgs::Empty msg)
 {
