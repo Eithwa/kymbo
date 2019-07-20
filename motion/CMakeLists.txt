@@ -63,6 +63,7 @@ include_directories(
 )
 foreach(subdir
 	motion
+    motion_detection
 )
 add_subdirectory(${subdir})
 endforeach()
