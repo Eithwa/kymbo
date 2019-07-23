@@ -59,6 +59,6 @@ void NodeHandle::odomcall(const nav_msgs::Odometry msg)
 }
 void NodeHandle::strategycall(const std_msgs::Int32 msg)
 {
-    //std::cout<<"strategy\n";
+    std::cout<<"strategy\n";
     strategy_pub.publish(msg);
 }

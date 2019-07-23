@@ -75,7 +75,7 @@ class NodeHandle(object):
 		self._catchBallDis = 70
 		self._scan = zerolistmaker(360)
 		self._double = None
-
+		self._object=zerolistmaker(20)
 		self.Strategy_Params()
 
 		if(SIMULATEION_FLAG):
@@ -94,6 +94,7 @@ class NodeHandle(object):
 
 		rospy.Service('tb3/strategy/save', Empty, self.Call_Get_Param)
 		self.sub_balls = rospy.Subscriber("tb3/ball",Int32MultiArray,self.Set_Balls)
+		self.sub_objects = rospy.Subscriber("tb3/object",Int32MultiArray,self.Set_Object)
 		#self.sub_ball2s = rospy.Subscriber("tb3/ball2",aim2,self.Set_Ball2s)
 		self.sub_start = rospy.Subscriber("tb3/strategy/start",Int32,self.Set_Start)
 		self.sub_save = rospy.Subscriber("tb3/save", Int32, self.Set_Param)
@@ -104,6 +105,7 @@ class NodeHandle(object):
 			#print("catchBallDis", self.catchBallDis)
 	print("ready")
 	def Strategy_Params(self):
+		self.strategy = 1
 		self.vel_x = 0.3
 		self.vel_z = 0.2
 		self.error_ang = 1.0
@@ -182,10 +184,13 @@ class NodeHandle(object):
 			print('start')
 
 	def Set_Balls(self,msg):
-		self._ballsColor = msg.data[0]
+		self._ballsColor = msg.data[0]#0red 1blue 2yellow
 		self._ballsAng = msg.data[1]
 		self._ballsDis = msg.data[2]
 		#self._ballsArea = msg.area
+	def Set_Object(self,msg):
+		self._object = msg.data
+		#print(self._object[1])
 	def Set_Double(self,msg):
 		self._double = msg.data
 		print(self.color_to_strings(self._double))
@@ -209,6 +214,7 @@ class NodeHandle(object):
 class Strategy(NodeHandle):
 	def __init__(self):
 		super(Strategy,self).__init__()
+		self.Get_Strategy_Params()
 		self.behavior = INIT
 		self.initpos = [[0.0,0.0]]
 		self.findballpos = [1.9,0.05]
@@ -302,7 +308,7 @@ class Strategy(NodeHandle):
 
 		self.pub_vel.publish(twist)
 	def Catch_Ball(self,control):
-		time.sleep(0.5)
+		#time.sleep(0.5)
 		self.pub_arm.publish(control)
 		
 	def Robot_Stop(self):
@@ -351,17 +357,21 @@ class Strategy(NodeHandle):
 		obstacle = 0
 		obstacle_num = 0
 		avoidance_distance = 0.5
-		avoidance_angle = 60
+		avoidance_angle = 45
 		avoidance_vel = 0.5
 		have_obstale = False
-		
+		min_distance = 999
+		min_distance_angle = 0
 		for i in range(len(self._scan)-10):
 			if(i>len(self._scan)):
 				break
-			if(self._scan[i]<0.35):
+			if(self._scan[i]<0.5):
 				have_obstale = True
 			if(self._scan[i] < avoidance_distance):
 				#print(i)
+				if(self._scan[i]<min_distance):
+					min_distance = self._scan[i]
+					min_distance_angle = i
 				if(i < avoidance_angle and i > 0):
 					#left side
 					obstacle_num +=1
@@ -377,6 +387,13 @@ class Strategy(NodeHandle):
 			elif(obstacle < avoidance_vel*-1):
 				obstacle = avoidance_vel*-1
 			#print (obstacle)
+		if(min_distance_angle<15 or min_distance_angle>345):
+			if(min_distance<0.4):
+				obstacle = obstacle *5
+				#if(obstacle>0.6):
+				#	obstacle=0.6
+				#if(obstacle<-0.6):
+				#	obstacle=-0.6
 		return obstacle, have_obstale
 	# strategy
 #==========================================
@@ -413,7 +430,6 @@ class Strategy(NodeHandle):
 		self.error_catchArea = 80000
 		self.findang = 30
 		self.error_ballang = 5.0
-		self.strategy = 1
 
 		self.ballcolor = None
 		self.balldis = 999
@@ -464,8 +480,8 @@ class Strategy(NodeHandle):
 				if(RPdis>self.avoid_error_dis):
 					a,b = self.Avoidance_Strategy()
 					z+=a
-					if(abs(z)>0.2 or b==True):
-						x=0.1
+					if(abs(z)>0.4 or b==True):
+						x=self.slow_vel_x
 				self.Robot_Vel([x,z])
 				self.prev_RPdis = RPdis
 			else:
@@ -748,17 +764,20 @@ class Strategy(NodeHandle):
 				self.ballarea = 0
 		elif(self.state == 2):
 			color = None
-			if(self._ballsColor == self.ballcolor):
-					color = self._ballsColor
+			#if(self._ballsColor == self.ballcolor):
+			#		color = self._ballsColor
+			if(self.ballcolor!=None):
+				if(self._object[self.ballcolor*4+1]<999):
+					color=self.ballcolor;
 			if(color!=None):
 				#print(color)
-				RPdis = self._ballsDis
-				RBang = self._ballsAng
+				RPdis = self._object[self.ballcolor*4+1]
+				RBang = -self._object[self.ballcolor*4+0]
 				#if(RPdis < self.error_area):
 				if(RPdis > self.catchBallDis):
 					if(self.prev_RPdis >= RPdis):
-						#if(RPdis > 220):
-						if(RPdis > 100):
+						if(RPdis > 220):
+						#if(RPdis > 100):
 							if(abs(RBang) > self.error_ang):
 								if(RBang > 0):
 									x = self.vel_x
@@ -772,13 +791,13 @@ class Strategy(NodeHandle):
 						else:
 							if(abs(RBang) > self.error_ang):
 								if(RBang > 0):
-									x = self.x_speed_planning(0.3)
+									x = self.slow_vel_x
 									z = self.vel_z
 								else:
-									x = self.x_speed_planning(0.3)
+									x = self.slow_vel_x
 									z = -self.vel_z 
 							else:
-								x = self.x_speed_planning(0.3)
+								x = self.slow_vel_x
 								z = 0				
 					else:
 						x = 0
@@ -789,11 +808,12 @@ class Strategy(NodeHandle):
 					if(RPdis>self.avoid_error_dis):
 						a,b = self.Avoidance_Strategy()
 						z+=a
-						if(abs(z)>0.2 or b==True):
+						if(abs(z)>0.4 or b==True):
 							x=self.slow_vel_x
 					self.Robot_Vel([x,z])
 					self.prev_RPdis = RPdis
 				else:
+					x=0.05
 					self.Catch_Ball(1)
 					if(self.strategy == 0):
 						self.behavior = GOAL
@@ -861,7 +881,7 @@ class Strategy(NodeHandle):
 				if(RPdis>self.avoid_error_dis):
 					a,b = self.Avoidance_Strategy()
 					z+=a
-					if(abs(z)>0.2 or b==True):
+					if(abs(z)>0.4 or b==True):
 						x=self.slow_vel_x
 				self.Robot_Vel([x,z])
 				self.prev_RPdis = RPdis
@@ -917,7 +937,7 @@ class Strategy(NodeHandle):
 				if(RPdis>self.avoid_error_dis):
 					a,b = self.Avoidance_Strategy()
 					z+=a
-					if(abs(z)>0.2 or b==True):
+					if(abs(z)>0.4 or b==True):
 						x=self.slow_vel_x
 				self.Robot_Vel([x,z])
 				self.prev_RPdis = RPdis
@@ -1021,7 +1041,7 @@ class Strategy(NodeHandle):
 				if(RPdis>self.avoid_error_dis):
 					a,b = self.Avoidance_Strategy()
 					z+=a
-					if(abs(z)>0.2 or b==True):
+					if(abs(z)>0.4 or b==True):
 						x=self.slow_vel_x
 				self.Robot_Vel([x,z])
 				self.prev_RPdis = RPdis
@@ -1051,9 +1071,9 @@ class Strategy(NodeHandle):
 				self.state = 3
 		elif(self.state == 3):
 			self.Robot_Stop()
-			time.sleep(0.5);
+			time.sleep(0.2);
 			self.pub_shoot.publish();
-			time.sleep(1);
+			#time.sleep(0.5);
 			self.state = 4
 		elif(self.state == 4):
 			self.Robot_Stop()
@@ -1087,9 +1107,9 @@ class Strategy(NodeHandle):
 				self.state = 1
 		elif(self.state == 1):
 			self.Robot_Stop()
-			time.sleep(0.5);
+			time.sleep(0.2);
 			self.pub_shoot.publish();
-			time.sleep(1);
+			#time.sleep(0.5);
 			self.state = 2
 		elif(self.state == 2):
 			self.Robot_Stop()
