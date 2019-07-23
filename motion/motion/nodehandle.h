@@ -32,6 +32,7 @@ class NodeHandle
     ros::Subscriber cmdvel_sub;
     ros::Subscriber battery_sub;
     ros::Subscriber odom_sub;
+    ros::Subscriber strategy_sub;
 
     void shootcall(const std_msgs::Empty msg);
     void armcall(const std_msgs::Int32 msg);
@@ -39,6 +40,7 @@ class NodeHandle
     void cmdvelcall(const geometry_msgs::Twist msg);
     void batterycall(const sensor_msgs::BatteryState msg);
     void odomcall(const nav_msgs::Odometry msg);
+    void strategycall(const std_msgs::Int32 msg);
     //===============publisher====================
     ros::Publisher shoot_pub;
     ros::Publisher arm_pub;
@@ -46,4 +48,5 @@ class NodeHandle
     ros::Publisher cmdvel_pub;
     ros::Publisher battery_pub;
     ros::Publisher odom_pub;
+    ros::Publisher strategy_pub;
 };

@@ -486,7 +486,7 @@ function Pub_Reset() {
 //===================================================================
 var TopicStart = new ROSLIB.Topic({
     ros: ros,
-    name: '/tb3/strategy/start',
+    name: 'motion/tb3/strategy/start',
     messageType: 'std_msgs/Int32'
 });
 
