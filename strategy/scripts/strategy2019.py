@@ -365,7 +365,7 @@ class Strategy(NodeHandle):
 		for i in range(len(self._scan)-10):
 			if(i>len(self._scan)):
 				break
-			if(self._scan[i]<0.5):
+			if((i<90 or i>270) and self._scan[i]<0.4):
 				have_obstale = True
 			if(self._scan[i] < avoidance_distance):
 				#print(i)
