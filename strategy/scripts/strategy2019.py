@@ -479,9 +479,12 @@ class Strategy(NodeHandle):
 						self.state = 0
 				if(RPdis>self.avoid_error_dis):
 					a,b = self.Avoidance_Strategy()
-					z+=a
-					if(abs(z)>0.4 or b==True):
+					
+					if(b==True):
 						x=self.slow_vel_x
+						z=z*0.8+a
+					else:
+						z+=a
 				self.Robot_Vel([x,z])
 				self.prev_RPdis = RPdis
 			else:
@@ -807,9 +810,11 @@ class Strategy(NodeHandle):
 							self.state = 1
 					if(RPdis>self.avoid_error_dis):
 						a,b = self.Avoidance_Strategy()
-						z+=a
-						if(abs(z)>0.4 or b==True):
+						if(b==True):
 							x=self.slow_vel_x
+							z=z*0.8+a
+						else:
+							z+=a
 					self.Robot_Vel([x,z])
 					self.prev_RPdis = RPdis
 				else:
@@ -880,9 +885,11 @@ class Strategy(NodeHandle):
 						self.state = 0
 				if(RPdis>self.avoid_error_dis):
 					a,b = self.Avoidance_Strategy()
-					z+=a
-					if(abs(z)>0.4 or b==True):
+					if(b==True):
 						x=self.slow_vel_x
+						z=z*0.8+a
+					else:
+						z+=a
 				self.Robot_Vel([x,z])
 				self.prev_RPdis = RPdis
 			else:
@@ -936,9 +943,11 @@ class Strategy(NodeHandle):
 						self.state = 0
 				if(RPdis>self.avoid_error_dis):
 					a,b = self.Avoidance_Strategy()
-					z+=a
-					if(abs(z)>0.4 or b==True):
+					if(b==True):
 						x=self.slow_vel_x
+						z=z*0.8+a
+					else:
+						z+=a
 				self.Robot_Vel([x,z])
 				self.prev_RPdis = RPdis
 			else:
@@ -1040,9 +1049,11 @@ class Strategy(NodeHandle):
 						self.state = 0
 				if(RPdis>self.avoid_error_dis):
 					a,b = self.Avoidance_Strategy()
-					z+=a
-					if(abs(z)>0.4 or b==True):
+					if(b==True):
 						x=self.slow_vel_x
+						z=z*0.8+a
+					else:
+						z+=a
 				self.Robot_Vel([x,z])
 				self.prev_RPdis = RPdis
 			else:
