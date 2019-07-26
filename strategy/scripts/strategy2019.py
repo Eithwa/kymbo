@@ -80,7 +80,7 @@ class NodeHandle(object):
 		self._goal = []
 		self.find_goal_count = 0
 
-		self.Timer_10 = TimeCounter(10)
+		self.Timer_10 = TimeCounter(time=10.0)
 		if(SIMULATEION_FLAG):
 			self.pub_vel = rospy.Publisher('robot1/cmd_vel',Twist, queue_size = 1)
 		
@@ -1017,9 +1017,9 @@ class Strategy(NodeHandle):
 	def	Short_Shoot_Strategy(self):
 		front_goal = copy.deepcopy(self.goal)
 		front_goal[0] = 2.5
-		goal_offset = _goal[ballcolor*4+0]
+		goal_offset = self._goal[self.ballcolor*4+0]
 		goal_offset_error = 30
-		goal_size = _goal[ballcolor*4+2]
+		goal_size = self._goal[self.ballcolor*4+2]
 		goal_size_filter = 2500
 		#=======================go to front of goal area===================
 		if(self.state == 0):
@@ -1120,9 +1120,10 @@ class Strategy(NodeHandle):
 			#goal_size_filter = 2500
 			if(goal_offset>0 and abs(goal_offset)>goal_offset_error):
 				z = -self.vel_z
+				self.Robot_Vel([0,z])
 			elif(goal_offset<0 and abs(goal_offset)>goal_offset_error):
 				z = self.vel_z
-			self.Robot_Vel([0,z])
+				self.Robot_Vel([0,z])
 			if(abs(goal_offset)<goal_offset_error):
 				self.state = 6
 				self.Robot_Stop()
