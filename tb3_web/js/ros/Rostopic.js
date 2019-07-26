@@ -563,3 +563,4 @@ odomcall.subscribe(function(msg) {
     document.getElementsByName('StrategyElement')[2].innerText = angle;
  
 });
+

@@ -18,6 +18,11 @@ function Open_Camera(value) {
     var mode = parseInt(document.getElementById('HSVSelect').value);
     let camera1 = document.getElementById('Camera1').checked;
     let camera2 = document.getElementById('Camera2').checked;
+    if(camera2){
+        if(mode==0)mode=5;
+        if(mode==1)mode=6;
+        if(mode==2)mode=7;
+    }
     Camera_Switch(value);
     if (view.checked) {
         video.src = "img/black.png";
@@ -53,14 +58,23 @@ function Open_Camera(value) {
                 case 4:
                     Pub_VideoMode(4);
                     break;
+                case 5:
+                    Pub_VideoMode(5);
+                    break;
+                case 6:
+                    Pub_VideoMode(6);
+                    break;
+                case 7:
+                    Pub_VideoMode(7);
+                    break;
             }
             console.log(mode);
             if(camera1){
                 setTimeout(function(){video.src = "http://" + document.getElementById("RobotIP").value + ":8080/stream?topic=/tb3/mask"},100);
             }
             if(camera2){
-                video.style.height = "100%";
-                video.style.top="0%";
+                video.style.height = "60%";
+                video.style.top="40%";
                 setTimeout(function(){video.src = "http://" + document.getElementById("RobotIP").value + ":8080/stream?topic=/tb3/mask2"},100);
             }
             //video.src = "http://" + document.getElementById("RobotIP").value + ":8080/stream?topic=/tb3/mask";
@@ -71,8 +85,8 @@ function Open_Camera(value) {
                 setTimeout(function(){video.src = "http://" + document.getElementById("RobotIP").value + ":8080/stream?topic=/tb3/monitor"},100);
             }
             if(camera2){
-                video.style.height = "100%";
-                video.style.top="0%";
+                video.style.height = "60%";
+                video.style.top="40%";
                 setTimeout(function(){video.src = "http://" + document.getElementById("RobotIP").value + ":8080/stream?topic=/tb3/monitor2"},100);
             }
             //video.src = "http://" + document.getElementById("RobotIP").value + ":8080/stream?topic=/tb3/monitor";
@@ -90,3 +104,4 @@ function Open_Camera(value) {
         }
     }
 }
+
