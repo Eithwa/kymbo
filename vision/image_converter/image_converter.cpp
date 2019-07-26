@@ -27,7 +27,7 @@ Vision::~Vision()
     destroyAllWindows();
 }
 //==================================影像接收與處理=============================
-//void Vision::imageCb(const sensor_msgs::ImageConstPtr& msg)
+//void Vision::imageCb(const sensor_msgs::ImageConstPtr& msg)c
 void Vision::imageCb(const sensor_msgs::CompressedImageConstPtr &msg)
 {
     cv_bridge::CvImagePtr cv_ptr;
@@ -144,13 +144,13 @@ void Vision::imageCb2(const sensor_msgs::ImageConstPtr& msg)
             //cv::waitKey(10);
             //source = cv_ptr->image.clone();
 
-            double scale = 0.5;
+            double scale = 0.3;
             Mat frame = cv_ptr->image.clone();
             Size dsize = Size(frame.cols * scale, frame.rows * scale);
             resize(frame, frame, dsize);
-            //source = CutFrame(frame, 0, frame.rows * 0.4, frame.cols, frame.rows);
-            source = frame.clone();
-            monitor2 = frame.clone();
+            source = CutFrame(frame, 0, 0, frame.cols, frame.rows * 0.4);
+            //source = frame.clone();
+            monitor2 = source.clone();
             //cv::imshow("view", source);
             //cv::waitKey(10);
 
@@ -162,22 +162,22 @@ void Vision::imageCb2(const sensor_msgs::ImageConstPtr& msg)
 #pragma omp section
                 {
                     red_goal = ColorMoldel(RedGoal);
-                    //cout<<"1";
+                    //cout<<"5";
                 }
 #pragma omp section
                 {
                     blue_goal = ColorMoldel(BlueGoal);
-                    //cout<<"2";
+                    //cout<<"6";
                 }
 #pragma omp section
                 {
                     yellow_goal = ColorMoldel(YellowGoal);
-                    //cout<<"3";
+                    //cout<<"7";
                 }
 
             }
             //center line
-            line(monitor2, Point(CenterXMsg, 0), Point(CenterXMsg, monitor2.rows), Scalar(0, 0, 255), 1);
+            line(monitor2, Point(CenterXMsg2, 0), Point(CenterXMsg2, monitor2.rows), Scalar(0, 0, 255), 1);
             monitor2 = DrawMonior(monitor2, red_goal, RedGoal);
             monitor2 = DrawMonior(monitor2, blue_goal, BlueGoal);
             monitor2 = DrawMonior(monitor2, yellow_goal, YellowGoal);
@@ -201,10 +201,10 @@ void Vision::imageCb2(const sensor_msgs::ImageConstPtr& msg)
             pub_object2(red_goal, blue_goal, yellow_goal);
 
             //imshow("mask2",mask2);
-            imshow("red_goal.mask",red_goal.mask);
-            imshow("blue_goal.mask",blue_goal.mask);
-            imshow("yellow_goal.mask",yellow_goal.mask);
-            imshow("monitor2",monitor2);
+            //imshow("red_goal.mask",red_goal.mask);
+            //imshow("blue_goal.mask",blue_goal.mask);
+            //imshow("yellow_goal.mask",yellow_goal.mask);
+            //imshow("monitor2",monitor2);
             waitKey(10);
         }
     }
