@@ -98,6 +98,11 @@ bool NodeHandle::connectcall(std_srvs::Empty::Request &req,
 }
 void NodeHandle::centercall(const std_msgs::Int32MultiArray msg)
 {
+    Setting[0] = msg.data[0];
+    Setting[1] = msg.data[1];
+    Setting[2] = msg.data[2];
+    Setting[3] = msg.data[3];
+
     CenterXMsg = msg.data[0];
     //cout<<"CenterXMsg"<<endl;
     CenterYMsg = msg.data[1];
@@ -113,6 +118,11 @@ void NodeHandle::centercall2(const std_msgs::Int32MultiArray msg)
     //cout<<CenterYMsg<<endl;
     CatchDistanceMsg2 = msg.data[2];
 	SizeFilterMsg2 = msg.data[3];
+
+    Setting2[0] = msg.data[0];
+    Setting2[1] = msg.data[1];
+    Setting2[2] = msg.data[2];
+    Setting2[3] = msg.data[3];
 }
 void NodeHandle::get_param()
 {
@@ -126,7 +136,6 @@ void NodeHandle::get_param()
     nh.getParam("/tb3/HSV/BlueGoal", HSV_bluegoal);
     nh.getParam("/tb3/HSV/YellowGoal", HSV_yellowgoal);
 
-    vector<int> Setting;
     nh.getParam("/tb3/center", Setting);
     if (Setting.size())
     {
@@ -135,13 +144,13 @@ void NodeHandle::get_param()
         CatchDistanceMsg = Setting[2];
 		SizeFilterMsg = Setting[3];
     }
-    nh.getParam("/tb3/center2", Setting);
+    nh.getParam("/tb3/center2", Setting2);
     if (Setting.size())
     {
-        CenterXMsg2 = Setting[0];
-        CenterYMsg2 = Setting[1];
-        CatchDistanceMsg2 = Setting[2];
-		SizeFilterMsg2 = Setting[3];
+        CenterXMsg2 = Setting2[0];
+        CenterYMsg2 = Setting2[1];
+        CatchDistanceMsg2 = Setting2[2];
+		SizeFilterMsg2 = Setting2[3];
     }
 }
 void NodeHandle::pub_monitor(Mat Monitor)
@@ -221,18 +230,18 @@ void NodeHandle::pub_object2(Object red, Object blue, Object yellow)
     std_msgs::Int32MultiArray msg;
     msg.data.push_back(red.offset);
     msg.data.push_back(red.distance);
-    msg.data.push_back(red.dis_point.x);
-    msg.data.push_back(red.dis_point.y);
+    msg.data.push_back(red.size);
+    msg.data.push_back(0);
 
     msg.data.push_back(blue.offset);
     msg.data.push_back(blue.distance);
-    msg.data.push_back(blue.dis_point.x);
-    msg.data.push_back(blue.dis_point.y);
+    msg.data.push_back(blue.size);
+    msg.data.push_back(0);
 
     msg.data.push_back(yellow.offset);
     msg.data.push_back(yellow.distance);
-    msg.data.push_back(yellow.dis_point.x);
-    msg.data.push_back(yellow.dis_point.y);
+    msg.data.push_back(yellow.size);
+    msg.data.push_back(0);
 
     obj_pub2.publish(msg);
 }

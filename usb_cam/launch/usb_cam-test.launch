@@ -24,7 +24,7 @@
 <launch>
  <group ns="camera1">
   <node name="usb_cam1" pkg="usb_cam" type="usb_cam_node" output="screen" >
-    <param name="video_device" value="/dev/video1" />
+    <param name="video_device" value="/dev/video0" />
     <param name="image_width" value="640" />
     <param name="image_height" value="480" />
     <param name="pixel_format" value="mjpeg" />
@@ -39,7 +39,7 @@
 
 <group ns="camera2">
   <node name="usb_cam2" pkg="usb_cam" type="usb_cam_node" output="screen" >
-    <param name="video_device" value="/dev/video0" />
+    <param name="video_device" value="/dev/video1" />
     <param name="image_width" value="640" />
     <param name="image_height" value="480" />
     <param name="pixel_format" value="mjpeg" />

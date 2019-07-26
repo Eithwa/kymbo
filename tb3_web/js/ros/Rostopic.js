@@ -435,9 +435,31 @@ Monitor.subscribe(function(msg) {
     var MBox = [];
 
     MBox=msg.data;
-    for (let i = 0; i < 12; i++) {
-        document.getElementsByName('MonitorElement')[i].innerText = MBox[i];
-    } 
+    let camera1 = document.getElementById('Camera1').checked;
+    let camera2 = document.getElementById('Camera2').checked;
+    if(camera1){
+        for (let i = 0; i < 12; i++) {
+            document.getElementsByName('MonitorElement')[i].innerText = MBox[i];
+        }
+    }
+});
+//=========================
+var Monitor2 = new ROSLIB.Topic({
+    ros: ros,
+    name: '/tb3/object2',
+    messageType: 'std_msgs/Int32MultiArray'
+});
+Monitor2.subscribe(function(msg) {
+    var MBox = [];
+
+    MBox=msg.data;
+    let camera1 = document.getElementById('Camera1').checked;
+    let camera2 = document.getElementById('Camera2').checked;
+    if(camera2){
+        for (let i = 0; i < 12; i++) {
+            document.getElementsByName('MonitorElement')[i].innerText = MBox[i];
+        }
+    }
 });
 //===========================
 var catchball = new ROSLIB.Topic({

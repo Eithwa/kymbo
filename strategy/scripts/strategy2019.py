@@ -18,7 +18,7 @@ import math
 import numpy as np
 #import cv2
 import time
-
+from counter import TimeCounter
 # rostopic msg
 from std_msgs.msg import Int32
 from std_msgs.msg import Empty as msg_Empty
@@ -77,7 +77,10 @@ class NodeHandle(object):
 		self._double = None
 		self._object=zerolistmaker(20)
 		self.Strategy_Params()
+		self._goal = []
+		self.find_goal_count = 0
 
+		self.Timer_10 = TimeCounter(10)
 		if(SIMULATEION_FLAG):
 			self.pub_vel = rospy.Publisher('robot1/cmd_vel',Twist, queue_size = 1)
 		
@@ -95,6 +98,7 @@ class NodeHandle(object):
 		rospy.Service('tb3/strategy/save', Empty, self.Call_Get_Param)
 		self.sub_balls = rospy.Subscriber("tb3/ball",Int32MultiArray,self.Set_Balls)
 		self.sub_objects = rospy.Subscriber("tb3/object",Int32MultiArray,self.Set_Object)
+		self.sub_objects2 = rospy.Subscriber("tb3/object2",Int32MultiArray,self.Set_Object2)
 		#self.sub_ball2s = rospy.Subscriber("tb3/ball2",aim2,self.Set_Ball2s)
 		self.sub_start = rospy.Subscriber("tb3/strategy/start",Int32,self.Set_Start)
 		self.sub_save = rospy.Subscriber("tb3/save", Int32, self.Set_Param)
@@ -190,6 +194,9 @@ class NodeHandle(object):
 		#self._ballsArea = msg.area
 	def Set_Object(self,msg):
 		self._object = msg.data
+		#print(self._object[1])
+	def Set_Object2(self,msg):
+		self._goal = msg.data
 		#print(self._object[1])
 	def Set_Double(self,msg):
 		self._double = msg.data
@@ -1010,6 +1017,10 @@ class Strategy(NodeHandle):
 	def	Short_Shoot_Strategy(self):
 		front_goal = copy.deepcopy(self.goal)
 		front_goal[0] = 2.5
+		goal_offset = _goal[ballcolor*4+0]
+		goal_offset_error = 30
+		goal_size = _goal[ballcolor*4+2]
+		goal_size_filter = 2500
 		#=======================go to front of goal area===================
 		if(self.state == 0):
 			RPang = Norm_Angle(self.Get_RP_Angle(front_goal)-self._front)
@@ -1060,9 +1071,67 @@ class Strategy(NodeHandle):
 				x = -self.vel_x
 				z = 0
 				self.Robot_Vel([x,z])
-				self.state = 2
+				#self.state = 2
+				if(self._front >= 0):
+					self.state = 2
+				else:
+					self.state = 3
 		#=======================go to goal area===================
+		
 		elif(self.state == 2):
+			RPang = Norm_Angle(-(30)-self._front)
+			if(abs(RPang) > self.error_ang):
+				if(RPang > 0):
+					x = 0
+					z = self.find_ball_vel_z
+
+					
+					if(goal_size > goal_size_filter):
+						self.state = 4
+				else:
+					x = 0
+					z = -self.find_ball_vel_z
+					self.state = 3
+					self.find_goal_count+=1
+					if(self.find_goal_count>=2):
+						self.state = 5
+				self.Robot_Vel([x,z])
+		elif(self.state == 3):
+			RPang = Norm_Angle((30)-self._front)
+			if(abs(RPang) > self.error_ang):
+				if(RPang > 0):
+					x = 0
+					z = self.find_ball_vel_z
+					if(goal_size > goal_size_filter):
+						self.state = 4
+				else:
+					x = 0
+					z = -self.find_ball_vel_z
+					self.state = 2
+					self.find_goal_count+=1
+					if(self.find_goal_count>=2):
+						self.state = 5
+				self.Robot_Vel([x,z])
+		elif(self.state == 4):
+			_,timer_flag = self.Timer_10.Process()
+			#goal_offset = _goal[ballcolor*4+0]
+			#goal_offset_error = 40
+			#goal_size = _goal[ballcolor*4+2]
+			#goal_size_filter = 2500
+			if(goal_offset>0 and abs(goal_offset)>goal_offset_error):
+				z = -self.vel_z
+			elif(goal_offset<0 and abs(goal_offset)>goal_offset_error):
+				z = self.vel_z
+			self.Robot_Vel([0,z])
+			if(abs(goal_offset)<goal_offset_error):
+				self.state = 6
+				self.Robot_Stop()
+				self.Timer_10.Init()
+			if(timer_flag == True):
+				self.state = 5				
+				self.Timer_10.Init()
+		elif(self.state == 5):
+			self.find_goal_count=0
 			RPang = Norm_Angle(self.Get_RP_Angle(self.goal)-self._front)
 			#RBang = 0.0
 			if(abs(RPang) > 0.5):
@@ -1078,15 +1147,17 @@ class Strategy(NodeHandle):
 				self.Robot_Stop()
 				x=0
 				z=0
-				time.sleep(1);
-				self.state = 3
-		elif(self.state == 3):
+				self.state = 6
+
+		elif(self.state == 6):
+			self.find_goal_count=0
+			time.sleep(0.5);
 			self.Robot_Stop()
 			time.sleep(0.2);
 			self.pub_shoot.publish();
 			#time.sleep(0.5);
-			self.state = 4
-		elif(self.state == 4):
+			self.state = 7
+		elif(self.state == 7):
 			self.Robot_Stop()
 			print("finish")
 			self.lostball = False

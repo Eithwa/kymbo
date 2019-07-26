@@ -64,17 +64,17 @@ void Vision::imageCb(const sensor_msgs::CompressedImageConstPtr &msg)
             {
 #pragma omp section
                 {
-                    red = ColorMoldel(Red);
+                    red = ColorMoldel(Red, Setting);
                     //cout<<"1";
                 }
 #pragma omp section
                 {
-                    blue = ColorMoldel(Blue);
+                    blue = ColorMoldel(Blue, Setting);
                     //cout<<"2";
                 }
 #pragma omp section
                 {
-                    yellow = ColorMoldel(Yellow);
+                    yellow = ColorMoldel(Yellow, Setting);
                     //cout<<"3";
                 }/*
 #pragma omp section
@@ -90,11 +90,11 @@ void Vision::imageCb(const sensor_msgs::CompressedImageConstPtr &msg)
             }
             //center line
             line(monitor, Point(CenterXMsg, 0), Point(CenterXMsg, monitor.rows), Scalar(0, 0, 255), 1);
-            monitor = DrawMonior(monitor, red, Red);
-            monitor = DrawMonior(monitor, blue, Blue);
-            monitor = DrawMonior(monitor, yellow, Yellow);
-            monitor = DrawMonior(monitor, white, White);
-            monitor = DrawMonior(monitor, black, Black);
+            monitor = DrawMonior(monitor, red, Red, Setting);
+            monitor = DrawMonior(monitor, blue, Blue, Setting);
+            monitor = DrawMonior(monitor, yellow, Yellow, Setting);
+            //monitor = DrawMonior(monitor, white, White, Setting);
+            //monitor = DrawMonior(monitor, black, Black, Setting);
             switch (HSV_mode)
             {
             case 0:
@@ -161,26 +161,26 @@ void Vision::imageCb2(const sensor_msgs::ImageConstPtr& msg)
             {
 #pragma omp section
                 {
-                    red_goal = ColorMoldel(RedGoal);
+                    red_goal = ColorMoldel(RedGoal, Setting2);
                     //cout<<"5";
                 }
 #pragma omp section
                 {
-                    blue_goal = ColorMoldel(BlueGoal);
+                    blue_goal = ColorMoldel(BlueGoal, Setting2);
                     //cout<<"6";
                 }
 #pragma omp section
                 {
-                    yellow_goal = ColorMoldel(YellowGoal);
+                    yellow_goal = ColorMoldel(YellowGoal, Setting2);
                     //cout<<"7";
                 }
 
             }
             //center line
             line(monitor2, Point(CenterXMsg2, 0), Point(CenterXMsg2, monitor2.rows), Scalar(0, 0, 255), 1);
-            monitor2 = DrawMonior(monitor2, red_goal, RedGoal);
-            monitor2 = DrawMonior(monitor2, blue_goal, BlueGoal);
-            monitor2 = DrawMonior(monitor2, yellow_goal, YellowGoal);
+            monitor2 = DrawMonior(monitor2, red_goal, RedGoal, Setting2);
+            monitor2 = DrawMonior(monitor2, blue_goal, BlueGoal, Setting2);
+            monitor2 = DrawMonior(monitor2, yellow_goal, YellowGoal, Setting2);
 
             switch (HSV_mode)
             {
@@ -261,8 +261,13 @@ cv::Mat Vision::CutFrame(Mat frame, int upx, int upy, int downx, int downy)
     }
     return output;
 }
-Object Vision::ColorMoldel(Color index)
+Object Vision::ColorMoldel(Color index, vector<int> setting)
 {
+    int CenterX=setting[0];
+    int CenterY=setting[1];
+    int CatchDistance=setting[2];
+	int SizeFilter=setting[3];
+
     Mat inputMat = source.clone();
     Mat hsv(inputMat.rows, inputMat.cols, CV_8UC3, Scalar(0, 0, 0));
     Mat mask(inputMat.rows, inputMat.cols, CV_8UC1, Scalar(0, 0, 0));
@@ -332,7 +337,7 @@ Object Vision::ColorMoldel(Color index)
         inputMat.copyTo(dst, (cv::Mat::ones(mask.size(), mask.type()) * 255 - mask));
         //cv::imshow("dst", dst);
         //waitKey(10);
-        ball = SearchObject(mask);
+        ball = SearchObject(mask, setting);
         ball.mask = dst.clone();
     }
     else
@@ -341,11 +346,16 @@ Object Vision::ColorMoldel(Color index)
     }
     return ball;
 }
-Object Vision::SearchObject(Mat mask)
+Object Vision::SearchObject(Mat mask, vector<int> setting)
 {
+    int CenterX=setting[0];
+    int CenterY=setting[1];
+    int CatchDistance=setting[2];
+	int SizeFilter=setting[3];
+
     Mat img = convertTo3Channels(mask.clone());
     int width = img.cols, length = img.rows;
-    int obj_size = SizeFilterMsg;
+    int obj_size = SizeFilter;
     Point start = Point(0, 0);
     Point end = Point(img.cols, img.rows);
     vector<vector<Coord> > obj; //物件列表
@@ -446,8 +456,8 @@ Object Vision::SearchObject(Mat mask)
         int distance;
         int size = 0;
         int radius = 0;
-        int center_x = CenterXMsg;
-        int center_y = CenterYMsg;
+        int center_x = CenterX;
+        int center_y = CenterY;
        // double PI = 3.14159;
         for (int j = 0; j < obj[i].size(); j++)
         {
@@ -513,11 +523,16 @@ Mat Vision::convertTo3Channels(const Mat &binImg)
     return three_channel;
 }
 
-cv::Mat Vision::DrawMonior(Mat frame, Object ball, Color index)
+cv::Mat Vision::DrawMonior(Mat frame, Object ball, Color index, vector<int> setting)
 {
+    int CenterX=setting[0];
+    int CenterY=setting[1];
+    int CatchDistance=setting[2];
+	int SizeFilter=setting[3];
+
     Mat outputframe = frame.clone();
-    int center_x = CenterXMsg;
-    int center_y = CenterYMsg;
+    int center_x = CenterX;
+    int center_y = CenterY;
     if (ball.size != -1)
     {
         string output;

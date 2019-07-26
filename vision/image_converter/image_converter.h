@@ -29,7 +29,7 @@ class Vision : protected NodeHandle
     void imageCb2(const sensor_msgs::ImageConstPtr& msg);
 
     cv::Mat CutFrame(Mat frame, int upx, int upy, int downx, int downy);
-    cv::Mat DrawMonior(Mat frame, Object ball, Color index);
+    cv::Mat DrawMonior(Mat frame, Object ball, Color index, vector<int> setting);
     double Rate();
     double FrameRate;
     double FrameRate2;
@@ -39,8 +39,8 @@ class Vision : protected NodeHandle
     cv::Mat mask;
     cv::Mat mask2;
 
-    Object ColorMoldel(Color index);
-    Object SearchObject(Mat mask);
+    Object ColorMoldel(Color index, vector<int> setting);
+    Object SearchObject(Mat mask, vector<int> setting);
     bool is_white(Mat &img, const Coord &c) { return img.data[3 * (c.get_y() * img.cols + c.get_x())] == 255; }
     Mat convertTo3Channels(const Mat &binImg);
 };

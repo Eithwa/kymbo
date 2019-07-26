@@ -42,7 +42,7 @@ class Object
         upleft = Point(0, 0);
         downright = Point(0, 0);
         center = Point(0, 0);
-        offset = 0;
+        offset = 999;
         distance = 9999;
         angle = 999;
         size = -1;
@@ -66,6 +66,8 @@ class NodeHandle
   public:
     NodeHandle();
     ~NodeHandle();
+    vector<int> Setting;
+    vector<int> Setting2;
     //================center====================
     int CenterXMsg;
     int CenterYMsg;

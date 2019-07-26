@@ -132,9 +132,57 @@ function keysdown(e) {
         }//] close arm
         else if (keys[221]){
             arm(1);
-        }//\ shoot
-        else if (keys[220]){
+        }// / shoot
+        else if (keys[191]){
             PublishTopicshoot();
+        }
+        //m disable
+        else if (keys[77]){
+            PublishTopicshootstrategy(0);
+            SendMsgss('disable');
+        }
+        //, short
+        else if (keys[188]){
+            PublishTopicshootstrategy(1);
+            SendMsgss('short');
+        }
+        //. far 
+        else if (keys[190]){
+            PublishTopicshootstrategy(2);
+            SendMsgss('far');
+        }
+        //j red
+        else if (keys[74]){
+            if(document.getElementById('Red_disable').checked == true){
+                document.getElementById('Red_disable').checked = false;
+                SendMsgss('R EN');
+            }else {
+                document.getElementById('Red_disable').checked = true;
+                SendMsgss('R DIS');
+            }
+            Color_Disable(1);
+        }
+        //k blue
+        else if (keys[75]){
+            if(document.getElementById('Blue_disable').checked == true){
+                document.getElementById('Blue_disable').checked = false;
+                SendMsgss('B EN');
+            }else {
+                document.getElementById('Blue_disable').checked = true;
+                SendMsgss('B DIS');
+            }
+            Color_Disable(2);
+        }
+        //l yellow
+        else if (keys[76]){
+            if(document.getElementById('Yellow_disable').checked == true){
+                document.getElementById('Yellow_disable').checked = false;
+                SendMsgss('Y EN');
+            }else {
+                document.getElementById('Yellow_disable').checked = true;
+                SendMsgss('Y DIS');
+            }
+            Color_Disable(3);
         }
     }
 }
