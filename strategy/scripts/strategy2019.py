@@ -372,7 +372,7 @@ class Strategy(NodeHandle):
 		for i in range(len(self._scan)-10):
 			if(i>len(self._scan)):
 				break
-			if((i<90 or i>270) and self._scan[i]<0.4):
+			if((i<80 or i>280) and self._scan[i]<0.45):
 				have_obstale = True
 			if(self._scan[i] < avoidance_distance):
 				#print(i)
@@ -394,9 +394,11 @@ class Strategy(NodeHandle):
 			elif(obstacle < avoidance_vel*-1):
 				obstacle = avoidance_vel*-1
 			#print (obstacle)
-		if(min_distance_angle<15 or min_distance_angle>345):
+		obstacle =obstacle*1.2
+		add_range = 20
+		if(min_distance_angle<(0+add_range) or min_distance_angle>(360-add_range)):
 			if(min_distance<0.4):
-				obstacle = obstacle *5
+				obstacle = obstacle *3.5
 				#if(obstacle>0.6):
 				#	obstacle=0.6
 				#if(obstacle<-0.6):
@@ -815,7 +817,7 @@ class Strategy(NodeHandle):
 						#self.state = 1
 						if(RPdis<0.3):
 							self.state = 1
-					if(RPdis>self.avoid_error_dis):
+					if(RPdis>220):
 						a,b = self.Avoidance_Strategy()
 						if(b==True):
 							x=self.slow_vel_x
@@ -1020,7 +1022,7 @@ class Strategy(NodeHandle):
 		goal_offset = self._goal[self.ballcolor*4+0]
 		goal_offset_error = 30
 		goal_size = self._goal[self.ballcolor*4+2]
-		goal_size_filter = 2500
+		goal_size_filter = 3000
 		#=======================go to front of goal area===================
 		if(self.state == 0):
 			RPang = Norm_Angle(self.Get_RP_Angle(front_goal)-self._front)
@@ -1039,6 +1041,12 @@ class Strategy(NodeHandle):
 		elif(self.state == 1):
 			RPdis = self.Get_RP_Dis(front_goal)
 			RPang = Norm_Angle(self.Get_RP_Angle(front_goal)-self._front)
+			if(self._pos[0]>front_goal[0]):
+				self.Robot_Stop()
+				if(self._front >= 0):
+					self.state = 2
+				else:
+					self.state = 3
 			if(RPdis > self.error_dis):
 				if(self.prev_RPdis >= RPdis):
 					if(abs(RPang) > self.error_ang):
@@ -1079,7 +1087,7 @@ class Strategy(NodeHandle):
 		#=======================go to goal area===================
 		
 		elif(self.state == 2):
-			RPang = Norm_Angle(-(30)-self._front)
+			RPang = Norm_Angle(-(90)-self._front)
 			if(abs(RPang) > self.error_ang):
 				if(RPang > 0):
 					x = 0
@@ -1097,7 +1105,7 @@ class Strategy(NodeHandle):
 						self.state = 5
 				self.Robot_Vel([x,z])
 		elif(self.state == 3):
-			RPang = Norm_Angle((30)-self._front)
+			RPang = Norm_Angle((90)-self._front)
 			if(abs(RPang) > self.error_ang):
 				if(RPang > 0):
 					x = 0
@@ -1113,6 +1121,7 @@ class Strategy(NodeHandle):
 						self.state = 5
 				self.Robot_Vel([x,z])
 		elif(self.state == 4):
+			self.find_goal_count=0
 			_,timer_flag = self.Timer_10.Process()
 			#goal_offset = _goal[ballcolor*4+0]
 			#goal_offset_error = 40
@@ -1128,9 +1137,9 @@ class Strategy(NodeHandle):
 				self.state = 6
 				self.Robot_Stop()
 				self.Timer_10.Init()
-			if(timer_flag == True):
-				self.state = 5				
-				self.Timer_10.Init()
+			#if(timer_flag == True):
+			#	self.state = 5				
+			#	self.Timer_10.Init()
 		elif(self.state == 5):
 			self.find_goal_count=0
 			RPang = Norm_Angle(self.Get_RP_Angle(self.goal)-self._front)
