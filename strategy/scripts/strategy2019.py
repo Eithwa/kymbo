@@ -1136,10 +1136,8 @@ class Strategy(NodeHandle):
 			if(abs(goal_offset)<goal_offset_error):
 				self.state = 6
 				self.Robot_Stop()
-				self.Timer_10.Init()
 			#if(timer_flag == True):
-			#	self.state = 5				
-			#	self.Timer_10.Init()
+			#	self.state = 5
 		elif(self.state == 5):
 			self.find_goal_count=0
 			RPang = Norm_Angle(self.Get_RP_Angle(self.goal)-self._front)
