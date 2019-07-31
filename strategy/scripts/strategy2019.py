@@ -683,10 +683,10 @@ class Strategy(NodeHandle):
 			if(abs(RPang) > self.error_ang):
 				if(RPang > 0):
 					x = 0
-					z = self.vel_z
+					z = self.find_ball_vel_z
 				else:
 					x = 0
-					z = -self.vel_z
+					z = -self.find_ball_vel_z
 				self.Robot_Vel([x,z])
 				if(self.lostball==True):
 					if(self._ballsColor==self.ballcolor and self._ballsDis<250):
@@ -1087,38 +1087,43 @@ class Strategy(NodeHandle):
 		#=======================go to goal area===================
 		
 		elif(self.state == 2):
-			RPang = Norm_Angle(-(90)-self._front)
+			RPang = Norm_Angle(-(80)-self._front)
 			if(abs(RPang) > self.error_ang):
 				if(RPang > 0):
 					x = 0
 					z = self.find_ball_vel_z
-
-					
-					if(goal_size > goal_size_filter):
-						self.state = 4
 				else:
 					x = 0
 					z = -self.find_ball_vel_z
-					self.state = 3
-					self.find_goal_count+=1
-					if(self.find_goal_count>=2):
-						self.state = 5
+				if(goal_size > goal_size_filter):
+					self.state = 4
 				self.Robot_Vel([x,z])
+			else:
+				self.Robot_Stop()
+				self.find_goal_count+=1
+				if(self.find_goal_count<2):
+					self.state = 3
+				else:
+					self.state =5
 		elif(self.state == 3):
-			RPang = Norm_Angle((90)-self._front)
+			RPang = Norm_Angle((80)-self._front)
 			if(abs(RPang) > self.error_ang):
 				if(RPang > 0):
 					x = 0
 					z = self.find_ball_vel_z
-					if(goal_size > goal_size_filter):
-						self.state = 4
 				else:
 					x = 0
 					z = -self.find_ball_vel_z
+				if(goal_size > goal_size_filter):
+					self.state = 4
+				self.Robot_Vel([x,z])
+			else:
+				self.Robot_Stop()
+				self.find_goal_count+=1
+				if(self.find_goal_count<2):
 					self.state = 2
-					self.find_goal_count+=1
-					if(self.find_goal_count>=2):
-						self.state = 5
+				else:
+					self.state =5
 				self.Robot_Vel([x,z])
 		elif(self.state == 4):
 			self.find_goal_count=0

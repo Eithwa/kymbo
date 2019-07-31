@@ -332,11 +332,11 @@ robot_Param.get(function(value) {
     let obj = document.getElementsByName('ParameterElement');
     if (value != null) {
         for (var i = 0; i < value.length; i++) {
-            obj[i].innerText = value[i];
+            obj[i].value = value[i];
         }
     } else {
         for (let i = 0; i < RobotParam.length; i++) {
-            obj[i].innerText = RobotParam[i];
+            obj[i].value = RobotParam[i];
         }
         //obj2[4].innerText = 0;
     }
@@ -349,11 +349,11 @@ splanning_Param.get(function(value) {
     let obj = document.getElementsByName('s_planningElement');
     if (value != null) {
         for (var i = 0; i < value.length; i++) {
-            obj[i].innerText = value[i];
+            obj[i].value = value[i];
         }
     } else {
         for (let i = 0; i < S_planningParam.length; i++) {
-            obj[i].innerText = S_planningParam[i];
+            obj[i].value = S_planningParam[i];
         }
         //obj2[4].innerText = 0;
     }
