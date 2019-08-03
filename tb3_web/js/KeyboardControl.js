@@ -136,53 +136,79 @@ function keysdown(e) {
         else if (keys[191]){
             PublishTopicshoot();
         }
+        /*
         //m disable
         else if (keys[77]){
             PublishTopicshootstrategy(0);
+            $('#disable_shoot').prop('checked',true);
+            $('#disable_shoot').change();
             SendMsgss('disable');
+            
         }
+        */
         //, short
         else if (keys[188]){
             PublishTopicshootstrategy(1);
+            $('#short_shoot').prop('checked',true);
+            $('#short_shoot').change();
             SendMsgss('short');
         }
         //. far 
         else if (keys[190]){
             PublishTopicshootstrategy(2);
+            $('#far_shoot').prop('checked',true);
+            $('#far_shoot').change();
             SendMsgss('far');
         }
         //j red
         else if (keys[74]){
             if(document.getElementById('Red_disable').checked == true){
                 document.getElementById('Red_disable').checked = false;
-                SendMsgss('R EN');
+                SendMsgss('RED ENABLE');
+                $('#Red_disable').prop('checked',false);
+                $('#Red_disable').change();
+                Color_Disable(1);
             }else {
                 document.getElementById('Red_disable').checked = true;
-                SendMsgss('R DIS');
+                SendMsgss('RED DISABLE');
+                $('#Red_disable').prop('checked',true);
+                $('#Red_disable').change();
+                Color_Disable(1);
             }
-            Color_Disable(1);
+            
         }
         //k blue
         else if (keys[75]){
             if(document.getElementById('Blue_disable').checked == true){
                 document.getElementById('Blue_disable').checked = false;
-                SendMsgss('B EN');
+                SendMsgss('BLUE ENABLE');
+                $('#Blue_disable').prop('checked',false);
+                $('#Blue_disable').change();
+                Color_Disable(2);
             }else {
                 document.getElementById('Blue_disable').checked = true;
-                SendMsgss('B DIS');
+                SendMsgss('BLUE DISABLE');
+                $('#Blue_disable').prop('checked',true);
+                $('#Blue_disable').change();
+                Color_Disable(2);
             }
-            Color_Disable(2);
+            
         }
         //l yellow
         else if (keys[76]){
             if(document.getElementById('Yellow_disable').checked == true){
                 document.getElementById('Yellow_disable').checked = false;
-                SendMsgss('Y EN');
+                SendMsgss('YELLOW ENABLE');
+                $('#Yellow_disable').prop('checked',false);
+                $('#Yellow_disable').change();
+                Color_Disable(3);
             }else {
                 document.getElementById('Yellow_disable').checked = true;
-                SendMsgss('Y DIS');
+                SendMsgss('YELLOW DISABLE');
+                $('#Yellow_disable').prop('checked',true);
+                $('#Yellow_disable').change();
+                Color_Disable(3);
             }
-            Color_Disable(3);
         }
     }
 }
