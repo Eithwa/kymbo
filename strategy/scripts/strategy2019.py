@@ -821,7 +821,7 @@ class Strategy(NodeHandle):
 						a,b = self.Avoidance_Strategy()
 						if(b==True):
 							x=self.slow_vel_x
-							z=z*0.8+a
+							z=z+a
 						else:
 							z+=a
 					self.Robot_Vel([x,z])
@@ -1124,7 +1124,6 @@ class Strategy(NodeHandle):
 					self.state = 2
 				else:
 					self.state =5
-				self.Robot_Vel([x,z])
 		elif(self.state == 4):
 			self.find_goal_count=0
 			_,timer_flag = self.Timer_10.Process()
