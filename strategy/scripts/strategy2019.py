@@ -374,6 +374,9 @@ class Strategy(NodeHandle):
 				break
 			if((i<80 or i>280) and self._scan[i]<0.45):
 				have_obstale = True
+			if((i<(0+80) or i>(360-80))  and self._scan[i]<0.8):
+				if((i>180 and math.sin(360-i)>40)or(i<80 and math.sin(i)>40)):
+					have_obstale = True
 			if(self._scan[i] < avoidance_distance):
 				#print(i)
 				if(self._scan[i]<min_distance):
@@ -1140,8 +1143,9 @@ class Strategy(NodeHandle):
 			if(abs(goal_offset)<goal_offset_error):
 				self.state = 6
 				self.Robot_Stop()
-			#if(timer_flag == True):
-			#	self.state = 5
+			if(timer_flag == True):
+				self.state = 5
+				print("fuck")
 		elif(self.state == 5):
 			self.find_goal_count=0
 			RPang = Norm_Angle(self.Get_RP_Angle(self.goal)-self._front)

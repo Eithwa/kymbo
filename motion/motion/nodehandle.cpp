@@ -24,7 +24,8 @@ NodeHandle::~NodeHandle()
 void NodeHandle::shootcall(const std_msgs::Empty msg)
 {
     //std::cout<<"shoot\n";
-    static double StartTime = ros::Time::now().toSec();
+    //static double StartTime = ros::Time::now().toSec();
+	static double StartTime = 0;
     double EndTime = ros::Time::now().toSec();
     double dt = EndTime - StartTime;
     if(dt>2){
