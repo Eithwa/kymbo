@@ -548,7 +548,7 @@ class Strategy(NodeHandle):
 					z = -self.find_ball_vel_z
 				self.Robot_Vel([x,z])
 				if(self.lostball==True):
-					if(self._ballsColor==self.ballcolor and self._ballsDis<250):
+					if(self._ballsColor==self.ballcolor and self._ballsDis<100):
 						self.ballcolor = self._ballsColor
 						self.balldis = self._ballsDis
 						self.ballang = self._front
@@ -562,7 +562,7 @@ class Strategy(NodeHandle):
 						self.ballcolor = self._ballsColor
 						self.balldis = self._ballsDis
 						self.ballang = self._front
-					if(self._ballsColor==self._double and self._ballsDis<280 and self.balldis>200):
+					if(self._ballsColor==self._double and self._ballsDis<100 and self.balldis>80):
 						self.ballcolor = self._ballsColor
 						self.balldis = self._ballsDis
 						self.ballang = self._front
@@ -587,7 +587,7 @@ class Strategy(NodeHandle):
 					z = -self.find_ball_vel_z
 				self.Robot_Vel([x,z])
 				if(self.lostball==True):
-					if(self._ballsColor==self.ballcolor and self._ballsDis<250):
+					if(self._ballsColor==self.ballcolor and self._ballsDis<100):
 						self.ballcolor = self._ballsColor
 						self.balldis = self._ballsDis
 						self.ballang = self._front
@@ -601,7 +601,7 @@ class Strategy(NodeHandle):
 						self.ballcolor = self._ballsColor
 						self.balldis = self._ballsDis
 						self.ballang = self._front
-					if(self._ballsColor==self._double and self._ballsDis<280 and self.balldis>200):
+					if(self._ballsColor==self._double and self._ballsDis<100 and self.balldis>80):
 						self.ballcolor = self._ballsColor
 						self.balldis = self._ballsDis
 						self.ballang = self._front
@@ -652,7 +652,7 @@ class Strategy(NodeHandle):
 				self.Robot_Vel([x,z])
 				
 				if(self.lostball==True):
-					if(self._ballsColor==self.ballcolor and self._ballsDis<250):
+					if(self._ballsColor==self.ballcolor and self._ballsDis<100):
 						self.ballcolor = self._ballsColor
 						self.balldis = self._ballsDis
 						self.ballang = self._front
@@ -666,7 +666,7 @@ class Strategy(NodeHandle):
 						self.ballcolor = self._ballsColor
 						self.balldis = self._ballsDis
 						self.ballang = self._front
-					if(self._ballsColor==self._double and self._ballsDis<280 and self.balldis>200):
+					if(self._ballsColor==self._double and self._ballsDis<100 and self.balldis>80):
 						self.ballcolor = self._ballsColor
 						self.balldis = self._ballsDis
 						self.ballang = self._front
@@ -692,7 +692,7 @@ class Strategy(NodeHandle):
 					z = -self.find_ball_vel_z
 				self.Robot_Vel([x,z])
 				if(self.lostball==True):
-					if(self._ballsColor==self.ballcolor and self._ballsDis<250):
+					if(self._ballsColor==self.ballcolor and self._ballsDis<100):
 						self.ballcolor = self._ballsColor
 						self.balldis = self._ballsDis
 						self.ballang = self._front
@@ -706,7 +706,7 @@ class Strategy(NodeHandle):
 						self.ballcolor = self._ballsColor
 						self.balldis = self._ballsDis
 						self.ballang = self._front
-					if(self._ballsColor==self._double and self._ballsDis<280 and self.balldis>200):
+					if(self._ballsColor==self._double and self._ballsDis<100 and self.balldis>80):
 						self.ballcolor = self._ballsColor
 						self.balldis = self._ballsDis
 						self.ballang = self._front
