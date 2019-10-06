@@ -375,11 +375,7 @@ class Strategy(NodeHandle):
 			if((i<80 or i>280) and self._scan[i]<0.45):
 				have_obstale = True
 			if((i<(0+80) or i>(360-80))  and self._scan[i]<0.8):
-<<<<<<< HEAD
-				if((i>(360-80) and (self._scan[i]*math.sin(360-i)) > 0.6)or(i<(0+80) and (self._scan[i]*math.sin(i)) > 0.6)):
-=======
-				if((i>180 and (self._scan[i]*math.sin(360-i)) > 0.4)or(i<80 and (self._scan[i]*math.sin(i)) > 0.4)):
->>>>>>> 4d3ec6a39e51eb37927a377ab34bd675f9b44437
+				if((i>(360-80) and (self._scan[i]*math.sin(360-i)) < 0.6)or(i<(0+80) and (self._scan[i]*math.sin(i)) < 0.6)):
 					have_obstale = True
 			if(self._scan[i] < avoidance_distance):
 				#print(i)
