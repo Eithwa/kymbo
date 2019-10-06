@@ -38,6 +38,7 @@ class Vision : protected NodeHandle
     cv::Mat monitor2;
     cv::Mat mask;
     cv::Mat mask2;
+	cv::Mat M;
 
     Object ColorMoldel(Color index, vector<int> setting);
     Object SearchObject(Mat mask, vector<int> setting);

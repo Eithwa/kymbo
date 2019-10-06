@@ -20,6 +20,25 @@ Vision::Vision()
     image_sub2 = nh.subscribe(USBCAM1, 1, &Vision::imageCb2, this);
 
     FrameRate = 0.0;
+
+    double scale = 0.5;
+    Mat img(308*scale, 410*scale, CV_8UC3, Scalar(0,0,0));
+    //Mat img=imread("//home/wheel/github/kym2019/src/vision/image_converter/image2.png", CV_LOAD_IMAGE_COLOR);
+    //Size dsize = Size(img.cols * scale, img.rows * scale);
+    //resize(img, img, dsize);
+    cv::Point2f src_points[] = { 
+      cv::Point2f(0,          img.rows*0.55),
+      cv::Point2f(img.cols-1, img.rows*0.55),
+      cv::Point2f(0,          img.rows-1),
+      cv::Point2f(img.cols-1, img.rows-1) };
+   
+    cv::Point2f dst_points[] = {
+      cv::Point2f(0,                          0),
+      cv::Point2f((img.cols-1),               0),
+      cv::Point2f((img.cols/2)-img.cols*0.06, img.rows-1),
+      cv::Point2f((img.cols/2)+img.cols*0.06, img.rows-1) };
+
+    M = cv::getPerspectiveTransform(src_points, dst_points);
 }
 Vision::~Vision()
 {
@@ -54,12 +73,12 @@ void Vision::imageCb(const sensor_msgs::CompressedImageConstPtr &msg)
 
             //=============================================
             Object red, blue, yellow, white, black;
-/*
-			red = ColorMoldel(Red);			
-			blue = ColorMoldel(Blue);
-			yellow = ColorMoldel(Yellow);
-			black = ColorMoldel(Black);
-			*/
+            /*
+            red = ColorMoldel(Red);			
+            blue = ColorMoldel(Blue);
+            yellow = ColorMoldel(Yellow);
+            black = ColorMoldel(Black);
+            */
 #pragma omp parallel sections
             {
 #pragma omp section
@@ -119,9 +138,13 @@ void Vision::imageCb(const sensor_msgs::CompressedImageConstPtr &msg)
             pub_fps(FrameRate);
             pub_object(red, blue, yellow, white, black);
             pub_catch(red, blue, yellow, white, black);
-			pub_ball(red, blue, yellow, white, black);
+            pub_ball(red, blue, yellow, white, black);
+
+            Mat perspective;
+            cv::warpPerspective(frame, perspective, M, cv::Size(frame.cols, frame.rows), cv::INTER_LINEAR);
             //imshow("mask",mask);
             //imshow("monitor",monitor);
+            //imshow("perspective",perspective);
             //waitKey(10);
         }
     }
@@ -486,8 +509,16 @@ Object Vision::SearchObject(Mat mask, vector<int> setting)
         dis_point = Point(center.x, min_y + (radius * 2));
         //dis_point = Point(center.x, min_y);
         //distance = img.rows-dis_point.y;
-        distance = sqrt(pow((dis_point.x - center_x), 2) + pow((dis_point.y - center_y), 2));
+        //distance = sqrt(pow((dis_point.x - center_x), 2) + pow((dis_point.y - center_y), 2));
         //cout<<dis_point.x<<" "<<center_x <<" "<<dis_point.y<<" "<<center_y<<" "<<distance<<endl;
+        //==========real distance============
+        int x = dis_point.x;
+        int y = dis_point.y+308*0.5*0.4;
+        int x_tmp = (M.at<double>(0, 0)*x+M.at<double>(0, 1)*y+M.at<double>(0, 2))/(M.at<double>(2, 0)*x+M.at<double>(2, 1)*y+M.at<double>(2, 2));
+        int y_tmp = (M.at<double>(1, 0)*x+M.at<double>(1, 1)*y+M.at<double>(1, 2))/(M.at<double>(2, 0)*x+M.at<double>(2, 1)*y+M.at<double>(2, 2));
+        distance = sqrt(pow((x_tmp - source.cols/2)*0.67, 2) + pow((source.rows+308*0.5*0.4-y_tmp)*0.67+14, 2));
+        //distance = (source.rows+308*0.5*0.4-y_tmp)*0.67+14; //14:可視最近距離
+        //===================================
         size = pow(radius, 2) * PI;
 
         //過慮長條角錐
@@ -503,9 +534,13 @@ Object Vision::SearchObject(Mat mask, vector<int> setting)
             ball.size = size;
             ball.radius = radius;
 		
-           int y = -(center.x - center_x);
-           int x = -(center.y - center_y*1.5);
-           ball.angle = atan2(y,x)*180/PI;
+           //int y = -(center.x - center_x);
+           //int x = -(center.y - center_y*1.5);
+           //ball.angle = atan2(y,x)*180/PI;
+           //==============real_angle=============
+           ball.angle = -(atan2((source.rows+308*0.5*0.4-y_tmp)*0.67+14,(x_tmp-CenterXMsg)*0.67)*180/PI-90);
+           //ball.offset = ball.angle;
+           //=====================================
 			
         }
     }

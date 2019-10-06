@@ -375,7 +375,7 @@ class Strategy(NodeHandle):
 			if((i<80 or i>280) and self._scan[i]<0.45):
 				have_obstale = True
 			if((i<(0+80) or i>(360-80))  and self._scan[i]<0.8):
-				if((i>180 and math.sin(360-i)>40)or(i<80 and math.sin(i)>40)):
+				if((i>(360-80) and (self._scan[i]*math.sin(360-i)) > 0.6)or(i<(0+80) and (self._scan[i]*math.sin(i)) > 0.6)):
 					have_obstale = True
 			if(self._scan[i] < avoidance_distance):
 				#print(i)
@@ -781,6 +781,7 @@ class Strategy(NodeHandle):
 			color = None
 			#if(self._ballsColor == self.ballcolor):
 			#		color = self._ballsColor
+			slow_down_dis = 30
 			if(self.ballcolor!=None):
 				if(self._object[self.ballcolor*4+1]<999):
 					color=self.ballcolor;
@@ -791,7 +792,7 @@ class Strategy(NodeHandle):
 				#if(RPdis < self.error_area):
 				if(RPdis > self.catchBallDis):
 					if(self.prev_RPdis >= RPdis):
-						if(RPdis > 220):
+						if(RPdis > slow_down_dis):
 						#if(RPdis > 100):
 							if(abs(RBang) > self.error_ang):
 								if(RBang > 0):
@@ -820,7 +821,7 @@ class Strategy(NodeHandle):
 						#self.state = 1
 						if(RPdis<0.3):
 							self.state = 1
-					if(RPdis>220):
+					if(RPdis> slow_down_dis):
 						a,b = self.Avoidance_Strategy()
 						if(b==True):
 							x=self.slow_vel_x

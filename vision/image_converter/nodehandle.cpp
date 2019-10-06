@@ -198,27 +198,27 @@ void NodeHandle::pub_fps2(double fps)
 void NodeHandle::pub_object(Object red, Object blue, Object yellow, Object white, Object black)
 {
     std_msgs::Int32MultiArray msg;
-    msg.data.push_back(red.offset);
+    msg.data.push_back(red.angle);
     msg.data.push_back(red.distance);
     msg.data.push_back(red.dis_point.x);
     msg.data.push_back(red.dis_point.y);
 
-    msg.data.push_back(blue.offset);
+    msg.data.push_back(blue.angle);
     msg.data.push_back(blue.distance);
     msg.data.push_back(blue.dis_point.x);
     msg.data.push_back(blue.dis_point.y);
 
-    msg.data.push_back(yellow.offset);
+    msg.data.push_back(yellow.angle);
     msg.data.push_back(yellow.distance);
     msg.data.push_back(yellow.dis_point.x);
     msg.data.push_back(yellow.dis_point.y);
 
-    msg.data.push_back(white.offset);
+    msg.data.push_back(white.angle);
     msg.data.push_back(white.distance);
     msg.data.push_back(white.dis_point.x);
     msg.data.push_back(white.dis_point.y);
 
-    msg.data.push_back(black.offset);
+    msg.data.push_back(black.angle);
     msg.data.push_back(black.distance);
     msg.data.push_back(black.dis_point.x);
     msg.data.push_back(black.dis_point.y);
