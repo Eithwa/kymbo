@@ -523,6 +523,8 @@ Object Vision::SearchObject(Mat mask, vector<int> setting)
 
         //過慮長條角錐
         //if( (down_y-up_y)*0.8 > (down_x-up_x) )continue;
+		//filter goal color
+		if( (max_x-min_x)*0.3 > (max_y-min_y) )continue;
         if (ball.distance > distance && size > obj_size)
         {
             ball.upleft = Point(min_x, min_y);

@@ -280,7 +280,10 @@ class Strategy(NodeHandle):
 		self._color = self.color_to_strings(self.ballcolor)
 		self._double_point = self.color_to_strings(self._double)
 		if(self._start):
-			print(self._double_point,self._behavior,self.state,self._color,self.balldis,self.ballang)
+			print("=========info=======")
+			print"double: ",self._double_point,"\nbehavior: ",self._behavior,"\nstate: ",self.state,"\ncolor: ",self._color,"\ndis: ",self.balldis,"\nang: ",int(self.ballang)
+			#print "double", self._double_point
+			print("====================")
 			self.Robot_Moving()
 			if(self.behavior == INIT):
 				
@@ -374,8 +377,8 @@ class Strategy(NodeHandle):
 				break
 			if((i<80 or i>280) and self._scan[i]<0.45):
 				have_obstale = True
-			if((i<(0+80) or i>(360-80))  and self._scan[i]<0.8):
-				if((i>(360-80) and (self._scan[i]*math.sin(360-i)) < 0.6)or(i<(0+80) and (self._scan[i]*math.sin(i)) < 0.6)):
+			if((i<(0+80) or i>(360-80))  and self._scan[i]<0.65):
+				if((i>(360-80) and (abs(self._scan[i]*math.sin(360-i))) < 0.4)or( i<(0+80) and (abs(self._scan[i]*math.sin(i)) < 0.4))):
 					have_obstale = True
 			if(self._scan[i] < avoidance_distance):
 				#print(i)
@@ -759,10 +762,10 @@ class Strategy(NodeHandle):
 				if(abs(RBang) > self.error_ang):
 					if(RBang > self.error_ang):
 						x = 0
-						z = self.vel_z
+						z = -self.vel_z
 					else:
 						x = 0
-						z = -self.vel_z
+						z = self.vel_z
 					self.Robot_Vel([x,z])
 				else:
 					self.Robot_Stop()
