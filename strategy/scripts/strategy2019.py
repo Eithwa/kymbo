@@ -554,7 +554,7 @@ class Strategy(NodeHandle):
 					if(self._ballsColor==self.ballcolor and self._ballsDis<100):
 						self.ballcolor = self._ballsColor
 						self.balldis = self._ballsDis
-						self.ballang = self._front
+						self.ballang = self._front+self._ballsAng
 						print('find ball')
 						self.Robot_Stop()
 						self.behavior = CATCH_BALL
@@ -564,11 +564,11 @@ class Strategy(NodeHandle):
 					if(self._ballsDis < self.balldis):
 						self.ballcolor = self._ballsColor
 						self.balldis = self._ballsDis
-						self.ballang = self._front
+						self.ballang = self._front+self._ballsAng
 					if(self._ballsColor==self._double and self._ballsDis<100 and self.balldis>80):
 						self.ballcolor = self._ballsColor
 						self.balldis = self._ballsDis
-						self.ballang = self._front
+						self.ballang = self._front+self._ballsAng
 						print("double!!!!!!!!")
 						self.Robot_Stop()
 						self.behavior = CATCH_BALL
@@ -593,7 +593,7 @@ class Strategy(NodeHandle):
 					if(self._ballsColor==self.ballcolor and self._ballsDis<100):
 						self.ballcolor = self._ballsColor
 						self.balldis = self._ballsDis
-						self.ballang = self._front
+						self.ballang = self._front+self._ballsAng
 						print('find ball')
 						self.Robot_Stop()
 						self.behavior = CATCH_BALL
@@ -603,11 +603,11 @@ class Strategy(NodeHandle):
 					if(self._ballsDis < self.balldis):
 						self.ballcolor = self._ballsColor
 						self.balldis = self._ballsDis
-						self.ballang = self._front
+						self.ballang = self._front+self._ballsAng
 					if(self._ballsColor==self._double and self._ballsDis<100 and self.balldis>80):
 						self.ballcolor = self._ballsColor
 						self.balldis = self._ballsDis
-						self.ballang = self._front
+						self.ballang = self._front+self._ballsAng
 						print("double!!!!!!!!")
 						self.Robot_Stop()
 						self.behavior = CATCH_BALL
@@ -658,7 +658,7 @@ class Strategy(NodeHandle):
 					if(self._ballsColor==self.ballcolor and self._ballsDis<100):
 						self.ballcolor = self._ballsColor
 						self.balldis = self._ballsDis
-						self.ballang = self._front
+						self.ballang = self._front+self._ballsAng
 						print('find ball')
 						self.Robot_Stop()
 						self.behavior = CATCH_BALL
@@ -668,11 +668,11 @@ class Strategy(NodeHandle):
 					if(self._ballsDis < self.balldis):
 						self.ballcolor = self._ballsColor
 						self.balldis = self._ballsDis
-						self.ballang = self._front
+						self.ballang = self._front+self._ballsAng
 					if(self._ballsColor==self._double and self._ballsDis<100 and self.balldis>80):
 						self.ballcolor = self._ballsColor
 						self.balldis = self._ballsDis
-						self.ballang = self._front
+						self.ballang = self._front+self._ballsAng
 						print("double!!!!!!!!")
 						self.Robot_Stop()
 						self.behavior = CATCH_BALL
@@ -698,7 +698,7 @@ class Strategy(NodeHandle):
 					if(self._ballsColor==self.ballcolor and self._ballsDis<100):
 						self.ballcolor = self._ballsColor
 						self.balldis = self._ballsDis
-						self.ballang = self._front
+						self.ballang = self._front+self._ballsAng
 						print('find ball')
 						self.Robot_Stop()
 						self.behavior = CATCH_BALL
@@ -708,11 +708,11 @@ class Strategy(NodeHandle):
 					if(self._ballsDis < self.balldis):
 						self.ballcolor = self._ballsColor
 						self.balldis = self._ballsDis
-						self.ballang = self._front
+						self.ballang = self._front+self._ballsAng
 					if(self._ballsColor==self._double and self._ballsDis<100 and self.balldis>80):
 						self.ballcolor = self._ballsColor
 						self.balldis = self._ballsDis
-						self.ballang = self._front
+						self.ballang = self._front+self._ballsAng
 						print("double!!!!!!!!")
 						self.Robot_Stop()
 						self.behavior = CATCH_BALL
@@ -759,14 +759,16 @@ class Strategy(NodeHandle):
 				#break
 			if(color!=None):
 				RBang = self._ballsAng
+				
 				if(abs(RBang) > self.error_ang):
 					if(RBang > self.error_ang):
 						x = 0
-						z = -self.vel_z
+						z = self.vel_z
 					else:
 						x = 0
-						z = self.vel_z
+						z = -self.vel_z
 					self.Robot_Vel([x,z])
+					#print("_ballsAng", self._ballsAng, "z", z)
 				else:
 					self.Robot_Stop()
 					self.state = 2
@@ -791,7 +793,7 @@ class Strategy(NodeHandle):
 			if(color!=None):
 				#print(color)
 				RPdis = self._object[self.ballcolor*4+1]
-				RBang = -self._object[self.ballcolor*4+0]
+				RBang = self._object[self.ballcolor*4+0]
 				#if(RPdis < self.error_area):
 				if(RPdis > self.catchBallDis):
 					if(self.prev_RPdis >= RPdis):

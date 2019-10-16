@@ -516,7 +516,11 @@ Object Vision::SearchObject(Mat mask, vector<int> setting)
         int y = dis_point.y+308*0.5*0.4;
         int x_tmp = (M.at<double>(0, 0)*x+M.at<double>(0, 1)*y+M.at<double>(0, 2))/(M.at<double>(2, 0)*x+M.at<double>(2, 1)*y+M.at<double>(2, 2));
         int y_tmp = (M.at<double>(1, 0)*x+M.at<double>(1, 1)*y+M.at<double>(1, 2))/(M.at<double>(2, 0)*x+M.at<double>(2, 1)*y+M.at<double>(2, 2));
+		//cout<<"y_tmp  "<<y_tmp<<endl;
+        //cout<<"x_tmp  "<<x_tmp<<endl;
+		if(y_tmp>200)x_tmp=x;
         distance = sqrt(pow((x_tmp - source.cols/2)*0.67, 2) + pow((source.rows+308*0.5*0.4-y_tmp)*0.67+14, 2));
+		
         //distance = (source.rows+308*0.5*0.4-y_tmp)*0.67+14; //14:可視最近距離
         //===================================
         size = pow(radius, 2) * PI;
@@ -540,7 +544,10 @@ Object Vision::SearchObject(Mat mask, vector<int> setting)
            //int x = -(center.y - center_y*1.5);
            //ball.angle = atan2(y,x)*180/PI;
            //==============real_angle=============
-           ball.angle = -(atan2((source.rows+308*0.5*0.4-y_tmp)*0.67+14,(x_tmp-CenterXMsg)*0.67)*180/PI-90);
+           if(y_tmp>200){
+				y_tmp=0;
+			}
+           ball.angle = (atan2((source.rows+308*0.5*0.4-y_tmp)*0.67+14,(x_tmp-CenterXMsg)*0.67)*180/PI-90);
            //ball.offset = ball.angle;
            //=====================================
 			
